@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AlphaVantageDto
 {
-    public class InputSample
+    public class SampleDto
     {
         //public DateTime Time { get; set; }
 

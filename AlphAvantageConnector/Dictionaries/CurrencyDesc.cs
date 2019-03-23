@@ -1,4 +1,5 @@
 ﻿using AlphaVantageConnector.Enums;
+using AlphaVantageDto.Enums;
 using System;
 using System.Collections.Generic;
 

@@ -1,6 +1,7 @@
 ﻿using AlphaVantageConnector.Enums;
 using AlphaVantageConnector.Interfaces;
 using AlphaVantageConnector.Resources;
+using AlphaVantageDto;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -29,23 +30,24 @@ namespace AlphaVantageConnector
         /// 
         /// </summary>
         /// <param name="input"></param>
-        public async Task SearchSymbol(string input)
+        public async Task<IEnumerable<SymbolDto>> SearchSymbol(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
                 throw new ArgumentNullException(AvResources.SymbolSearchInputEmptyEx);
             }
 
-            if (input.Length < 3) return;
+            if (input.Length < 3) return null;
 
             var function = ApiFunctions.SYMBOL_SEARCH;
 
             var parameters = new Dictionary<ApiParameters, string>
             {
-                { ApiParameters.KeyWords, input}
+                { ApiParameters.KeyWords, input }
             };
 
-            await _connector.RequestApiAsync(function, parameters);
+            var response = await _connector.RequestApiAsync<SymbolBestMatchesDto>(function, parameters);
+            return response.Data.BestMatches;
         }
     }
 }

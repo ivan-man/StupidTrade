@@ -94,6 +94,7 @@ MUR,Mauritian Rupee
 MVR,Maldivian Rufiyaa
 MWK,Malawian Kwacha
 MXN,Mexican Peso
+MXP,Old Mexican Peso
 MYR,Malaysian Ringgit
 MZN,Mozambican Metical
 NAD,Namibian Dollar

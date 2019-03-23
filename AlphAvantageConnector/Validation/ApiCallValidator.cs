@@ -11,6 +11,9 @@ using System.Text.RegularExpressions;
 
 namespace AlphaVantageConnector.Validation
 {
+    /// <summary>
+    /// Not strong validation of AV API url, but API Key must be first.
+    /// </summary>
     public class ApiCallValidator : IApiCallValidator
     {
         private readonly string _callPattern;
@@ -49,7 +52,7 @@ namespace AlphaVantageConnector.Validation
 
             var apiFunctionsPattern = $"{ApiParametersDic.GetWord(ApiParameters.Function)}=({string.Join("|", apiFunctions.Select(q => q.ToString()))})";
 
-            var symbolPattern = $"{ApiParametersDic.GetWord(ApiParameters.Symbol)}=([A-Z]" + "{3,})"; //numbers?
+            var symbolPattern = $"{ApiParametersDic.GetWord(ApiParameters.Symbol)}=([0-9A-Z.-]" + "{3,})"; //numbers?
             patterns.Add(symbolPattern);
 
             var intervalsPattern = $"{ApiParametersDic.GetWord(ApiParameters.Interval)}=({string.Join("|", Intervals.Values)})";
@@ -58,14 +61,11 @@ namespace AlphaVantageConnector.Validation
             var outputSizePattern = $"{ApiParametersDic.GetWord(ApiParameters.OutputSize)}=({string.Join("|", outputSize)})";
             patterns.Add(outputSizePattern);
 
-            var apikeyPattern = $"{ApiParametersDic.GetWord(ApiParameters.ApiKey)}=((([A-Z]|[0-9])" + "{16})|demo)";
+            var apikeyPattern = $"{ApiParametersDic.GetWord(ApiParameters.ApiKey)}=(([0-9A-Z]" + "{16})|demo)";
             patterns.Add(apikeyPattern);
 
             var symbolsPattern = $"({ApiParametersDic.GetWord(ApiParameters.FromSymbol)}|{ApiParametersDic.GetWord(ApiParameters.ToSymbol)})=([0-9]" + "{3})" + "([a-z]" + "{1,})";
             patterns.Add(symbolsPattern);
-
-            //var toSymbolPattern = $"{ApiParametersDic.GetWord(ApiParameters.ToSymbol)}=([0-9]" + "{3})" + "([a-z]" + "{1,})";
-            //patterns.Add(toSymbolPattern);
 
             var dataTypePattern = $"{ApiParametersDic.GetWord(ApiParameters.DataType)}=({string.Join("|", Enum.GetNames(typeof(GettingDataType))).ToLower()})";
             patterns.Add(dataTypePattern);
@@ -73,7 +73,7 @@ namespace AlphaVantageConnector.Validation
             var marketPattern = $"{ApiParametersDic.GetWord(ApiParameters.Market)}=([A-Z]" + "{3})" + "([a-z]" + "{1,})";
             patterns.Add(marketPattern);
 
-            var keyWordsPattern = $"{ApiParametersDic.GetWord(ApiParameters.KeyWords)}=([a-z]|[A-Z]" + "{3,})";
+            var keyWordsPattern = $"{ApiParametersDic.GetWord(ApiParameters.KeyWords)}=([a-zA-Z]" + "{3,})";
             patterns.Add(keyWordsPattern);
 
             var seriesTypePattern = $"{ApiParametersDic.GetWord(ApiParameters.SeriesType)}=({string.Join("|", Enum.GetNames(typeof(SeriesType))).ToLower()})";

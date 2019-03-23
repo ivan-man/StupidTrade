@@ -40,7 +40,7 @@ namespace AlphaVantageConnector
         }
 
 
-        public async Task<(MetaData MetaData, JToken Data)> RequestApiAsync(ApiFunctions function, IDictionary<ApiParameters, string> parameters = null)
+        public async Task<(MetaData MetaData, TData Data)> RequestApiAsync<TData>(ApiFunctions function, IDictionary<ApiParameters, string> parameters = null)
         {
             var request = _requestCompositor.ComposeHttpRequest(_apiKeyService.GetKey(), function, parameters);
             var response = await _apiHttpClient.SendAsync(request);
@@ -61,20 +61,28 @@ namespace AlphaVantageConnector
 
             AssertNotBadRequest(jObject);
 
-            JToken data = null;
+            JToken jData = null;
 
             var properties = jObject.Children().Select(ch => (JProperty)ch).ToArray();
 
             if (properties.Length > 1)
             {
-                data = properties[1].Value;
+                jData = properties[1].Value;
             }
             else if (properties?.Any() == true)
             {
-                data = jObject;
+                jData = jObject;
             }
 
-            return (metaData, data);
+            try
+            {
+                var data = jData.ToObject<TData>();
+                return (metaData, data);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
 

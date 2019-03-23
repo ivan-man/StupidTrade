@@ -8,6 +8,6 @@ namespace AlphaVantageConnector.Interfaces
 {
     public interface IAlphaVantageConnector
     {
-        Task<(MetaData MetaData, JToken Data)> RequestApiAsync(ApiFunctions function, IDictionary<ApiParameters, string> query = null);
+        Task<(MetaData MetaData, TData Data)> RequestApiAsync<TData>(ApiFunctions function, IDictionary<ApiParameters, string> query = null);
     }
 }

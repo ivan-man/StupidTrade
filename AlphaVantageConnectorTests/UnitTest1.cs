@@ -4,6 +4,7 @@ using AlphaVantageConnector.Enums;
 using AlphaVantageConnector.Interfaces;
 using AlphaVantageConnector.Validation;
 using AlphaVantageDto;
+using AlphaVantageDto.Enums;
 using Moq;
 using Newtonsoft;
 using System;
@@ -19,7 +20,8 @@ namespace AlphaVantageConnectorTests
     {
         private const string demoKey = "demo";
         private const string normalSizeKey = "0123456789ABCDEF";
-        private string _realKey;
+
+        private IApiKeyService _realKeySrvice = new ApiKeyService();
 
         private readonly Mock<IApiKeyService> _apiKeyServiceMock = new Mock<IApiKeyService>();
         private readonly IApiKeyService _apiKeyServiceReal = new ApiKeyService();
@@ -42,7 +44,6 @@ namespace AlphaVantageConnectorTests
 
         private void Init()
         {
-            _realKey = _apiKeyServiceReal.GetKey();
             _apiCallValidatorMock.Setup(q => q.Validate(It.IsAny<string>())).Returns(true);
 
             _apiCallValidatorReal = new ApiCallValidator();
@@ -62,7 +63,7 @@ namespace AlphaVantageConnectorTests
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns("demo");
             _requestCompositorReal = new RequestCompositor(_apiCallValidatorMock.Object);
 
-            var response = await _connectorReal.RequestApiAsync(
+            var response = await _connectorReal.RequestApiAsync<InformationDto>(
                 ApiFunctions.TIME_SERIES_WEEKLY,
                 new Dictionary<ApiParameters, string>
                 {
@@ -70,7 +71,7 @@ namespace AlphaVantageConnectorTests
                 }
             );
 
-            var informationDto = response.Data.ToObject<InformationDto>();
+            var informationDto = response.Data;
 
             Assert.Equal(
                 "The **demo** API key is for demo purposes only. Please claim your free API key at (https://www.alphavantage.co/support/#api-key) to explore our full API offerings. It takes fewer than seconds, and we are committed to making it free forever.",
@@ -81,11 +82,9 @@ namespace AlphaVantageConnectorTests
         [Fact]
         public async Task ConnectorGetDataTest()
         {
-            //_requstCompositorReal = new RequestCompositor(_apiCallValidatorMock.Object);
-
             var connector = new AlphaVantageConnector.AlphaVantageConnector(_apiKeyServiceReal, _requestCompositorReal, _apiHttpClient);
 
-            var response = await connector.RequestApiAsync(ApiFunctions.TIME_SERIES_WEEKLY, new Dictionary<ApiParameters, string>
+            var response = await connector.RequestApiAsync<Dictionary<DateTime, SampleDto>>(ApiFunctions.TIME_SERIES_WEEKLY, new Dictionary<ApiParameters, string>
             {
                 { ApiParameters.Symbol, "MSFT" }
             });
@@ -95,7 +94,7 @@ namespace AlphaVantageConnectorTests
             Assert.Equal("Weekly Prices (open, high, low, close) and Volumes", metaData.Information);
             Assert.Equal("MSFT", metaData.Symbol);
 
-            var data = response.Data.ToObject<Dictionary<DateTime, InputSample>>();
+            var data = response.Data;
 
             Assert.True(data.Any());
         }
@@ -140,7 +139,11 @@ namespace AlphaVantageConnectorTests
         [Fact]
         public async Task SearchSymbolTest()
         {
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
+            var result = await _alphaVantageServiceReal.SearchSymbol("BabA");
 
+            Assert.True(result?.Any() == true);
+            Assert.True(result?.Any(q => q.Symbol.Equals("BABA")) == true);
         }
     }
 }

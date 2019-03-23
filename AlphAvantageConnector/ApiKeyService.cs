@@ -1,5 +1,4 @@
 ﻿using AlphaVantageConnector.Interfaces;
-using System;
 
 namespace AlphaVantageConnector
 {
@@ -16,4 +15,3 @@ namespace AlphaVantageConnector
         }
     }
 }
-

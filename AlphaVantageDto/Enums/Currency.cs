@@ -1,5 +1,5 @@
 ﻿
-namespace AlphaVantageConnector.Enums
+namespace AlphaVantageDto.Enums
 {
     public enum Currency
     {
@@ -99,6 +99,7 @@ namespace AlphaVantageConnector.Enums
         MVR,
         MWK,
         MXN,
+        MXP,
         MYR,
         MZN,
         NAD,
