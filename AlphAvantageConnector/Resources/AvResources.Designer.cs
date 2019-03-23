@@ -115,6 +115,15 @@ namespace AlphaVantageConnector.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time Series.
+        /// </summary>
+        internal static string TimeSeries {
+            get {
+                return ResourceManager.GetString("TimeSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         internal static string Unknown {

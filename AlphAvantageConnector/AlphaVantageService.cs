@@ -2,6 +2,8 @@
 using AlphaVantageConnector.Interfaces;
 using AlphaVantageConnector.Resources;
 using AlphaVantageDto;
+using AlphaVantageDto.Enums;
+using Common.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,9 +23,35 @@ namespace AlphaVantageConnector
         /// <summary>
         /// This API returns intraday time series (timestamp, open, high, low, close, volume) of the equity specified. 
         /// </summary>
-        public void GetIntradaySeries()
+        public async Task<Dictionary<DateTime, SampleDto>> GetIntradaySeries(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full)
         {
+            if (string.IsNullOrEmpty(symbol))
+            {
+                throw new ArgumentException($"Empty {nameof(symbol)}.");
+            }
 
+            if (outputSize == 0)
+            {
+                throw new ArgumentException($"Incorrect {nameof(outputSize)}.");
+            }
+
+            if (interval == 0)
+            {
+                throw new ArgumentException($"Incorrect {nameof(interval)}.");
+            }
+
+            var function = ApiFunctions.TIME_SERIES_INTRADAY;
+
+            var parameters = new Dictionary<ApiParameters, string>
+            {
+                { ApiParameters.Symbol, symbol },
+                { ApiParameters.Interval, Intervals.Values[interval] },
+                { ApiParameters.OutputSize, outputSize.ToLower() },
+            };
+
+            var result = await _connector.RequestApiAsync<Dictionary<DateTime, SampleDto>>(function, parameters);
+            var data = result.Data;
+            return data;
         }
 
         /// <summary>

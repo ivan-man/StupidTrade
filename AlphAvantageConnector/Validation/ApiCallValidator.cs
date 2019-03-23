@@ -50,7 +50,7 @@ namespace AlphaVantageConnector.Validation
 
             var patterns = new List<string>();
 
-            var apiFunctionsPattern = $"{ApiParametersDic.GetWord(ApiParameters.Function)}=({string.Join("|", apiFunctions.Select(q => q.ToString()))})";
+            var apiFunctionsPattern = $"{ApiParametersDic.GetWord(ApiParameters.Function)}=({string.Join("|", apiFunctions.Where(q => q > 0).Select(q => q.ToString()))})";
 
             var symbolPattern = $"{ApiParametersDic.GetWord(ApiParameters.Symbol)}=([0-9A-Z.-]" + "{3,})"; //numbers?
             patterns.Add(symbolPattern);
@@ -58,7 +58,7 @@ namespace AlphaVantageConnector.Validation
             var intervalsPattern = $"{ApiParametersDic.GetWord(ApiParameters.Interval)}=({string.Join("|", Intervals.Values)})";
             patterns.Add(intervalsPattern);
 
-            var outputSizePattern = $"{ApiParametersDic.GetWord(ApiParameters.OutputSize)}=({string.Join("|", outputSize)})";
+            var outputSizePattern = $"{ApiParametersDic.GetWord(ApiParameters.OutputSize)}=({string.Join("|", outputSize.Where(q => q > 0)).ToLower()})";
             patterns.Add(outputSizePattern);
 
             var apikeyPattern = $"{ApiParametersDic.GetWord(ApiParameters.ApiKey)}=(([0-9A-Z]" + "{16})|demo)";

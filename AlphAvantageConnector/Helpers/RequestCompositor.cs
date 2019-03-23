@@ -87,14 +87,6 @@ namespace AlphaVantageConnector
                 }
             }
 
-            //var urlParameters = parameters != null
-            //    ? new Dictionary<string, string>((parameters as IDictionary<ApiParameters, string>).Select(q => new KeyValuePair<string, string>(ApiParametersDic.GetWord(q.Key), q.Value)))
-            //    : new Dictionary<string, string>();
-
-            //urlParameters.Add(ApiParametersDic.GetWord(ApiParameters.Function), function.ToString());
-
-            //urlParameters.Add(ApiParametersDic.GetWord(ApiParameters.ApiKey), apiKey);
-
             var stringUrl = QueryHelpers.AddQueryString(AlphaVantageConstants.BaseAddress, urlParameters);
 
             _apiValidator.Validate(stringUrl);

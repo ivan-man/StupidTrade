@@ -135,6 +135,9 @@
   <data name="SymbolSearchInputEmptyEx" xml:space="preserve">
     <value>Keyword is empty.</value>
   </data>
+  <data name="TimeSeries" xml:space="preserve">
+    <value>Time Series</value>
+  </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unknown</value>
   </data>

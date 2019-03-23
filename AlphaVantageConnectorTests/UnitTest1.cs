@@ -74,7 +74,7 @@ namespace AlphaVantageConnectorTests
             var informationDto = response.Data;
 
             Assert.Equal(
-                "The **demo** API key is for demo purposes only. Please claim your free API key at (https://www.alphavantage.co/support/#api-key) to explore our full API offerings. It takes fewer than seconds, and we are committed to making it free forever.",
+                "The **demo** API key is for demo purposes only. Please claim your free API key at (https://www.alphavantage.co/support/#api-key) to explore our full API offerings. It takes fewer than 20 seconds, and we are committed to making it free forever.",
                 informationDto?.Information);
         }
 
@@ -144,6 +144,18 @@ namespace AlphaVantageConnectorTests
 
             Assert.True(result?.Any() == true);
             Assert.True(result?.Any(q => q.Symbol.Equals("BABA")) == true);
+        }
+
+
+        [Fact]
+        public async Task GetIntradaySeriesTest()
+        {
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
+            var result = await _alphaVantageServiceReal.GetIntradaySeries("BABA", IntervalsEnum.FiveMin);
+
+            Assert.True(result?.Any() == true);
+            //Assert.True(result?.Any() == true);
+            //Assert.True(result?.Any(q => q.Symbol.Equals("BABA")) == true);
         }
     }
 }

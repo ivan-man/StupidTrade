@@ -47,7 +47,7 @@ namespace AlphaVantageConnector
 
             var jsonString = await response.Content.ReadAsStringAsync();
 
-            jsonString = DeserializationHelper.ClearResponse(jsonString);
+            jsonString = PreDeserializationHelper.ClearResponse(jsonString);
 
             var jObject = (JObject)JsonConvert.DeserializeObject(jsonString);
 
