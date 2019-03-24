@@ -1,1 +1,1 @@
-Place here your API key
+Place here your API key. Gett it on https://www.alphavantage.co/support/#api-key
