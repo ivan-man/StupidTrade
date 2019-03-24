@@ -124,6 +124,15 @@ namespace AlphaVantageConnector.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Technical Analysis.
+        /// </summary>
+        internal static string TechnicalAnalysis {
+            get {
+                return ResourceManager.GetString("TechnicalAnalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Time Series.
         /// </summary>
         internal static string TimeSeries {

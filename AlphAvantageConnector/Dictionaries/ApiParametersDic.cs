@@ -38,7 +38,7 @@ namespace AlphaVantageConnector.Dictionaries
                     { ApiParameters.FastDmaType, "fastdmatype"},
                     { ApiParameters.FastDPeriod, "fastdperiod"},
 
-                    { ApiParameters.TimePeriod, "timeperiod"}, //Numb
+                    { ApiParameters.TimePeriod, "time_period"}, //Numb
 
                     { ApiParameters.Acceleration, "acceleration"},
                     { ApiParameters.Maximum, "maximum"},

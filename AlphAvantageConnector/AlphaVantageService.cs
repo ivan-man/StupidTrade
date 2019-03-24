@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace AlphaVantageConnector
 {
+    /// <summary>
+    /// Implementation of https://www.alphavantage.co/documentation 
+    /// </summary>
     public class AlphaVantageService : IAlphaVantageService
     {
         private readonly IAlphaVantageConnector _connector;
@@ -24,19 +27,19 @@ namespace AlphaVantageConnector
         /// <summary>
         /// This API returns intraday time series (timestamp, open, high, low, close, volume) of the equity specified. 
         /// </summary>
-        public async Task<Dictionary<DateTime, SampleDto>> GetIntradaySeries(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full)
+        public async Task<Dictionary<DateTime, SampleDto>> GetIntradaySeriesAsync(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full)
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
             }
 
-            if (outputSize == 0)
+            if (outputSize == OutputSize.None)
             {
                 throw new ArgumentException($"Incorrect {nameof(outputSize)}.");
             }
 
-            if (interval == 0)
+            if (interval == IntervalsEnum.Unknown)
             {
                 throw new ArgumentException($"Incorrect {nameof(interval)}.");
             }
@@ -70,14 +73,14 @@ namespace AlphaVantageConnector
         /// The "compact" option is recommended if you would like to reduce the data size of each API call. 
         /// </param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleDto>> GetDailyTimeSeries(string symbol, OutputSize outputSize = OutputSize.Compact)
+        public async Task<Dictionary<DateTime, SampleDto>> GetDailyTimeSeriesAsync(string symbol, OutputSize outputSize = OutputSize.Compact)
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
             }
 
-            if (outputSize == 0)
+            if (outputSize == OutputSize.None)
             {
                 throw new ArgumentException($"Incorrect {nameof(outputSize)}.");
             }
@@ -110,14 +113,14 @@ namespace AlphaVantageConnector
         /// The "compact" option is recommended if you would like to reduce the data size of each API call. 
         /// </param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleAdjustedDto>> GetDailyTimeSeriesAdjusted(string symbol, OutputSize outputSize = OutputSize.Compact)
+        public async Task<Dictionary<DateTime, SampleAdjustedDto>> GetDailyTimeSeriesAdjustedAsync(string symbol, OutputSize outputSize = OutputSize.Compact)
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
             }
 
-            if (outputSize == 0)
+            if (outputSize == OutputSize.None)
             {
                 throw new ArgumentException($"Incorrect {nameof(outputSize)}.");
             }
@@ -143,11 +146,11 @@ namespace AlphaVantageConnector
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleDto>> GetWeeklyTimeSeries(string symbol)
+        public async Task<Dictionary<DateTime, SampleDto>> GetWeeklyTimeSeriesAsync(string symbol)
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
             }
 
             var function = ApiFunctions.TIME_SERIES_WEEKLY;
@@ -171,11 +174,11 @@ namespace AlphaVantageConnector
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleAdjustedDto>> GetWeeklyTimeSeriesAdjusted(string symbol)
+        public async Task<Dictionary<DateTime, SampleAdjustedDto>> GetWeeklyTimeSeriesAdjustedAsync(string symbol)
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
             }
 
             var function = ApiFunctions.TIME_SERIES_WEEKLY_ADJUSTED;
@@ -198,11 +201,11 @@ namespace AlphaVantageConnector
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleDto>> GetMonthlyTimeSeries(string symbol)
+        public async Task<Dictionary<DateTime, SampleDto>> GetMonthlyTimeSeriesAsync(string symbol)
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
             }
 
             var function = ApiFunctions.TIME_SERIES_MONTHLY;
@@ -225,11 +228,11 @@ namespace AlphaVantageConnector
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleAdjustedDto>> GetMonthlyTimeSeriesAdjusted(string symbol)
+        public async Task<Dictionary<DateTime, SampleAdjustedDto>> GetMonthlyTimeSeriesAdjustedAsync(string symbol)
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
             }
 
             var function = ApiFunctions.TIME_SERIES_MONTHLY_ADJUSTED;
@@ -251,11 +254,11 @@ namespace AlphaVantageConnector
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public async Task<GlobalQuoteDto> GetQuoteEndpoint(string symbol)
+        public async Task<GlobalQuoteDto> GetQuoteEndpointAsync(string symbol)
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
             }
 
             var function = ApiFunctions.GLOBAL_QUOTE;
@@ -273,7 +276,7 @@ namespace AlphaVantageConnector
         /// Search symbols.
         /// </summary>
         /// <param name="input"></param>
-        public async Task<IEnumerable<SymbolDto>> SearchSymbol(string input)
+        public async Task<IEnumerable<SymbolDto>> SearchSymbolAsync(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
@@ -295,8 +298,62 @@ namespace AlphaVantageConnector
 
         #endregion StockTimeSeries
 
-        #region Forex
 
+        #region Technical indicators
+
+        /// <summary>
+        /// Returns the simple moving average (SMA) values.
+        /// </summary>
+        /// <param name="symbol">
+        /// The name of the security of your choice.
+        /// </param>
+        /// <param name="interval">
+        /// Time interval between two consecutive data points in the time series
+        /// </param>
+        /// <param name="timePeriod">
+        /// Number of data points used to calculate each moving average value. 
+        /// Positive integers are accepted (e.g., time_period=60, time_period=200)
+        /// </param>
+        /// <param name="seriesType"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<DateTime, SmaSampleDto>> GetSmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType)
+        {
+            if (string.IsNullOrEmpty(symbol))
+            {
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+            }
+
+            if (interval == IntervalsEnum.Unknown)
+            {
+                throw new ArgumentException($"Incorrect {nameof(interval)}.");
+            }
+
+            if (timePeriod < 1)
+            {
+                throw new ArgumentException($"Incorrect {nameof(timePeriod)}.");
+            }
+
+            var function = ApiFunctions.SMA;
+
+            var parameters = new Dictionary<ApiParameters, string>
+            {
+                { ApiParameters.Symbol, symbol },
+                { ApiParameters.Interval, Intervals.Values[interval] },
+                { ApiParameters.TimePeriod, timePeriod.ToString() },
+                { ApiParameters.SeriesType, seriesType.ToLower() },
+            };
+
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SmaSampleDto>>(function, parameters);
+            return response.Data;
+        }
+        #endregion Technical indicators
+
+
+
+        #region Forex (not implemented)
         #endregion Forex
+
+        #region Digital & Crypto Currencies Realtime (not implemented)
+        #endregion Digital & Crypto Currencies Realtime
     }
 }

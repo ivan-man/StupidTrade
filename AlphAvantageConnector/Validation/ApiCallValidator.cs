@@ -96,7 +96,7 @@ namespace AlphaVantageConnector.Validation
                 $"|{ApiParametersDic.GetWord(ApiParameters.SlowKmaType)}" +
                 $"|{ApiParametersDic.GetWord(ApiParameters.FastDmaType)}" +
                 $"|{ApiParametersDic.GetWord(ApiParameters.FastDPeriod)}" +
-                $"|{ApiParametersDic.GetWord(ApiParameters.TimePeriod)}([0-9])" +
+                $"|{ApiParametersDic.GetWord(ApiParameters.TimePeriod)}([0-9]" + "{0,1})" +
                 ")=([0-9]{1,4})";
             patterns.Add(integersPattern);
 

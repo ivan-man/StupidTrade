@@ -151,7 +151,7 @@ namespace AlphaVantageConnectorTests
         public async Task SearchSymbolTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.SearchSymbol("BabA");
+            var result = await _alphaVantageServiceReal.SearchSymbolAsync("BabA");
 
             Assert.True(result?.Any() == true);
             Assert.True(result?.Any(q => q.Symbol.Equals(_testSymbol)) == true);
@@ -161,7 +161,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetIntradaySeriesTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetIntradaySeries(_testSymbol, IntervalsEnum.FiveMin);
+            var result = await _alphaVantageServiceReal.GetIntradaySeriesAsync(_testSymbol, IntervalsEnum.FiveMin);
 
             Assert.True(result?.Any() == true);
         }
@@ -170,7 +170,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetDailyTimeSeriesTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetDailyTimeSeries(_testSymbol);
+            var result = await _alphaVantageServiceReal.GetDailyTimeSeriesAsync(_testSymbol);
 
             Assert.True(result?.Any() == true);
             Assert.True(result?.Count == 100);
@@ -180,7 +180,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetDailyTimeSeriesAdjustedTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetDailyTimeSeriesAdjusted(_testSymbol);
+            var result = await _alphaVantageServiceReal.GetDailyTimeSeriesAdjustedAsync(_testSymbol);
 
             Assert.True(result?.Any() == true);
             Assert.True(result?.Count == 100);
@@ -190,7 +190,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetWeeklyTimeSeriesTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetWeeklyTimeSeries(_testSymbol);
+            var result = await _alphaVantageServiceReal.GetWeeklyTimeSeriesAsync(_testSymbol);
 
             Assert.True(result?.Any() == true);
         }
@@ -199,7 +199,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetWeeklyTimeSeriesAdjustedTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetWeeklyTimeSeriesAdjusted(_testSymbol);
+            var result = await _alphaVantageServiceReal.GetWeeklyTimeSeriesAdjustedAsync(_testSymbol);
 
             Assert.True(result?.Any() == true);
         }
@@ -208,7 +208,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetMonthlyTimeSeriesTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetMonthlyTimeSeries(_testSymbol);
+            var result = await _alphaVantageServiceReal.GetMonthlyTimeSeriesAsync(_testSymbol);
 
             Assert.True(result?.Any() == true);
         }
@@ -217,7 +217,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetMonthlyTimeSeriesAdjustedTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetMonthlyTimeSeriesAdjusted(_testSymbol);
+            var result = await _alphaVantageServiceReal.GetMonthlyTimeSeriesAdjustedAsync(_testSymbol);
 
             Assert.True(result?.Any() == true);
         }
@@ -226,16 +226,24 @@ namespace AlphaVantageConnectorTests
         public async Task GetQuoteEndpointTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetQuoteEndpoint(_testSymbol);
+            var result = await _alphaVantageServiceReal.GetQuoteEndpointAsync(_testSymbol);
 
             Assert.NotNull(result);
             Assert.Equal(_testSymbol, result.Symbol);
         }
+        #endregion StockTimeSeries
+
+        #region Technical indicators
+        [Fact]
+        public async Task GetSmaTest()
+        {
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
+            var result = await _alphaVantageServiceReal.GetSmaAsync(_testSymbol, IntervalsEnum.FiveMin, 60, SeriesType.Close);
+
+            Assert.NotNull(result);
+            Assert.True(result.Any());
+        }
+
+        #endregion Technical indicators
     }
-
-    #endregion StockTimeSeries
-
-    #region Forex
-
-    #endregion Forex
 }

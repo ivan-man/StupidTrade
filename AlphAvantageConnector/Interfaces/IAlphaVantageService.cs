@@ -12,7 +12,7 @@ namespace AlphaVantageConnector.Interfaces
         /// <summary>
         /// This API returns intraday time series (timestamp, open, high, low, close, volume) of the equity specified. 
         /// </summary>
-        Task<Dictionary<DateTime, SampleDto>> GetIntradaySeries(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full);
+        Task<Dictionary<DateTime, SampleDto>> GetIntradaySeriesAsync(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full);
 
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </param>
         /// <returns></returns>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleDto>> GetDailyTimeSeries(string symbol, OutputSize outputSize = OutputSize.Compact);
+        Task<Dictionary<DateTime, SampleDto>> GetDailyTimeSeriesAsync(string symbol, OutputSize outputSize = OutputSize.Compact);
 
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace AlphaVantageConnector.Interfaces
         /// The "compact" option is recommended if you would like to reduce the data size of each API call. 
         /// </param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleAdjustedDto>> GetDailyTimeSeriesAdjusted(string symbol, OutputSize outputSize = OutputSize.Compact);
+        Task<Dictionary<DateTime, SampleAdjustedDto>> GetDailyTimeSeriesAdjustedAsync(string symbol, OutputSize outputSize = OutputSize.Compact);
 
         /// <summary>
         /// This API returns weekly time series (last trading day of each week, weekly open, weekly high, weekly low, weekly close, weekly volume) 
@@ -60,7 +60,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleDto>> GetWeeklyTimeSeries(string symbol);
+        Task<Dictionary<DateTime, SampleDto>> GetWeeklyTimeSeriesAsync(string symbol);
 
         /// <summary>
         /// This API returns weekly adjusted time series
@@ -71,7 +71,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleAdjustedDto>> GetWeeklyTimeSeriesAdjusted(string symbol);
+        Task<Dictionary<DateTime, SampleAdjustedDto>> GetWeeklyTimeSeriesAdjustedAsync(string symbol);
 
         /// <summary>
         /// This API returns monthly time series (last trading day of each month, monthly open, monthly high, monthly low, monthly close, monthly volume) 
@@ -81,7 +81,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleDto>> GetMonthlyTimeSeries(string symbol);
+        Task<Dictionary<DateTime, SampleDto>> GetMonthlyTimeSeriesAsync(string symbol);
 
         /// <summary>
         /// This API returns monthly adjusted time series 
@@ -92,7 +92,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleAdjustedDto>> GetMonthlyTimeSeriesAdjusted(string symbol);
+        Task<Dictionary<DateTime, SampleAdjustedDto>> GetMonthlyTimeSeriesAdjustedAsync(string symbol);
 
         /// <summary>
         /// A lightweight alternative to the time series APIs, 
@@ -100,14 +100,35 @@ namespace AlphaVantageConnector.Interfaces
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        Task<GlobalQuoteDto> GetQuoteEndpoint(string symbol);
+        Task<GlobalQuoteDto> GetQuoteEndpointAsync(string symbol);
 
 
         /// <summary>
         /// Search symbols.
         /// </summary>
         /// <param name="input"></param>
-        Task<IEnumerable<SymbolDto>> SearchSymbol(string input);
+        Task<IEnumerable<SymbolDto>> SearchSymbolAsync(string input);
 
+
+        #region Technical indicators
+
+        /// <summary>
+        /// Returns the simple moving average (SMA) values.
+        /// </summary>
+        /// <param name="symbol">
+        /// The name of the security of your choice.
+        /// </param>
+        /// <param name="interval">
+        /// Time interval between two consecutive data points in the time series
+        /// </param>
+        /// <param name="timePeriod">
+        /// Number of data points used to calculate each moving average value. 
+        /// Positive integers are accepted (e.g., time_period=60, time_period=200)
+        /// </param>
+        /// <param name="seriesType"></param>
+        /// <returns></returns>
+        Task<Dictionary<DateTime, SmaSampleDto>> GetSmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType);
+
+        #endregion Technical indicators
     }
 }

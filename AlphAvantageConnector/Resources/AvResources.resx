@@ -138,6 +138,9 @@
   <data name="SymbolSearchInputEmptyEx" xml:space="preserve">
     <value>Keyword is empty.</value>
   </data>
+  <data name="TechnicalAnalysis" xml:space="preserve">
+    <value>Technical Analysis</value>
+  </data>
   <data name="TimeSeries" xml:space="preserve">
     <value>Time Series</value>
   </data>

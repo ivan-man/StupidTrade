@@ -1,4 +1,6 @@
-﻿using AlphaVantageConnector.Resources;
+﻿using AlphaVantageConnector.Enums;
+using AlphaVantageConnector.Resources;
+using System;
 using System.Text.RegularExpressions;
 
 namespace AlphaVantageConnector.Helpers
@@ -8,7 +10,7 @@ namespace AlphaVantageConnector.Helpers
         public static string ClearResponse(string response)
         {
             //remove numbers of fields
-            var result = Regex.Replace(response, @"[0-9]{1,2}\. ", string.Empty); 
+            var result = Regex.Replace(response, @"\""[0-9]{1,2}[\.:] ", @"""");
 
             if (response.Contains(AvResources.TimeSeries))
             {
@@ -20,7 +22,13 @@ namespace AlphaVantageConnector.Helpers
                 result = Regex.Replace(result, $@"([ %])", string.Empty);
             }
 
-            return result; 
+            if (response.Contains(AvResources.TechnicalAnalysis))
+            {
+                var indicators = Enum.GetValues(typeof(TechnicalIndicators)) as TechnicalIndicators[];
+                result = Regex.Replace(result, $@"({AvResources.TechnicalAnalysis}: ({string.Join("|", indicators)}))", "TechnicalAnalysis");
+            }
+
+            return result;
         }
     }
 }
