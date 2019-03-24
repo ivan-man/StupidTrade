@@ -79,6 +79,15 @@ namespace AlphaVantageConnector.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Global Quote.
+        /// </summary>
+        internal static string GlobalQuote {
+            get {
+                return ResourceManager.GetString("GlobalQuote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Incorrect function name.
         /// </summary>
         internal static string IncorrectFunctionNameValidateError {

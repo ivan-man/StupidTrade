@@ -123,6 +123,9 @@
   <data name="BadRequestToken" xml:space="preserve">
     <value>Error Message</value>
   </data>
+  <data name="GlobalQuote" xml:space="preserve">
+    <value>Global Quote</value>
+  </data>
   <data name="IncorrectFunctionNameValidateError" xml:space="preserve">
     <value>Incorrect function name</value>
   </data>

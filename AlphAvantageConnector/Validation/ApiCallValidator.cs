@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 namespace AlphaVantageConnector.Validation
 {
     /// <summary>
-    /// Not strong validation of AV API url, but API Key must be first.
+    /// Not strong validation of AV API url, but API function must be first.
     /// </summary>
     public class ApiCallValidator : IApiCallValidator
     {
@@ -21,8 +21,7 @@ namespace AlphaVantageConnector.Validation
 
         public ApiCallValidator()
         {
-            // https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=MSFT&interval=5min&outputsize=full&apikey=demo
-
+            //Examples:
             //from_symbol=EUR
             //to_symbol=EUR
             //datatype = csv
@@ -44,7 +43,6 @@ namespace AlphaVantageConnector.Validation
             //acceleration=0.01
             //maximum=0.20
 
-
             var apiFunctions = Enum.GetValues(typeof(ApiFunctions)) as ApiFunctions[];
             var outputSize = Enum.GetValues(typeof(OutputSize)) as OutputSize[];
 
@@ -64,13 +62,13 @@ namespace AlphaVantageConnector.Validation
             var apikeyPattern = $"{ApiParametersDic.GetWord(ApiParameters.ApiKey)}=(([0-9A-Z]" + "{16})|demo)";
             patterns.Add(apikeyPattern);
 
-            var symbolsPattern = $"({ApiParametersDic.GetWord(ApiParameters.FromSymbol)}|{ApiParametersDic.GetWord(ApiParameters.ToSymbol)})=([0-9]" + "{3})" + "([a-z]" + "{1,})";
+            var symbolsPattern = $"({ApiParametersDic.GetWord(ApiParameters.FromSymbol)}|{ApiParametersDic.GetWord(ApiParameters.ToSymbol)})=([0-9]" + "{3,})" + "([a-z]" + "{1,})";
             patterns.Add(symbolsPattern);
 
             var dataTypePattern = $"{ApiParametersDic.GetWord(ApiParameters.DataType)}=({string.Join("|", Enum.GetNames(typeof(GettingDataType))).ToLower()})";
             patterns.Add(dataTypePattern);
 
-            var marketPattern = $"{ApiParametersDic.GetWord(ApiParameters.Market)}=([A-Z]" + "{3})" + "([a-z]" + "{1,})";
+            var marketPattern = $"{ApiParametersDic.GetWord(ApiParameters.Market)}=([A-Z]" + "{3,})" + "([a-z]" + "{1,})";
             patterns.Add(marketPattern);
 
             var keyWordsPattern = $"{ApiParametersDic.GetWord(ApiParameters.KeyWords)}=([a-zA-Z]" + "{3,})";
@@ -102,52 +100,9 @@ namespace AlphaVantageConnector.Validation
                 ")=([0-9]{1,4})";
             patterns.Add(integersPattern);
 
-
-            //var slowLimitPattern = $"{ApiParametersDic.GetWord(ApiParameters.SlowLimit)}=" + "([0-9]([.,][0-9]{1,3}))";
-            //patterns.Add(slowLimitPattern);
-
-            //var signalPeriodPattern = $"{ApiParametersDic.GetWord(ApiParameters.SignalPeriod)}=" + "([0-9]{1,4}))";
-            //patterns.Add(signalPeriodPattern);
-
-            //var fastMaTypePattern = $"{ApiParametersDic.GetWord(ApiParameters.FastMaType)}=" + "([0-9]{1,4}))";
-            //patterns.Add(fastMaTypePattern);
-
-            //var slowMaTypePattern = $"{ApiParametersDic.GetWord(ApiParameters.SlowMaType)}=" + "([0-9]{1,4}))";
-            //patterns.Add(slowMaTypePattern);
-
-            //var signalMaTypePattern = $"{ApiParametersDic.GetWord(ApiParameters.SignalMaType)}=" + "([0-9]{1,4}))";
-            //patterns.Add(signalMaTypePattern);
-
-            //var fastKPeriodPattern = $"{ApiParametersDic.GetWord(ApiParameters.FastKPeriod)}=" + "([0-9]{1,4}))";
-            //patterns.Add(fastKPeriodPattern);
-
-            //var slowKMaTypePattern = $"{ApiParametersDic.GetWord(ApiParameters.SlowKmaType)}=" + "([0-9]{1,4}))";
-            //patterns.Add(slowKMaTypePattern);
-
-            //var fastDmaTypePattern = $"{ApiParametersDic.GetWord(ApiParameters.FastDmaType)}=" + "([0-9]{1,4}))";
-            //patterns.Add(fastDmaTypePattern);
-
-            //var fastDPeriodPattern = $"{ApiParametersDic.GetWord(ApiParameters.FastDPeriod)}=" + "([0-9]{1,4}))";
-            //patterns.Add(fastDPeriodPattern);
-
-            //var timePeriodPattern = $"{ApiParametersDic.GetWord(ApiParameters.TimePeriod)}([0-9])=" + "([0-9]{1,4}))";
-            //patterns.Add(timePeriodPattern);
-
-            //var accelerationPattern = $"{ApiParametersDic.GetWord(ApiParameters.Acceleration)}=" + "([0-9]([.,][0-9]{1,3}))";
-            //patterns.Add(accelerationPattern);
-
-            //var maximumPattern = $"{ApiParametersDic.GetWord(ApiParameters.Maximum)}=" + "([0-9]([.,][0-9]{1,3}))";
-            //patterns.Add(maximumPattern);
-
-
             _callPattern =
                 $@"^{AlphaVantageConstants.BaseAddress.Replace(@"/", @"\/")}\?{apiFunctionsPattern}" +
                 $@"(\&({string.Join('|', patterns)}))+$";
-
-
-            //_callPattern =
-            //    $@"^{AlphaVantageConstants.BaseAddress.Replace(@"/", @"\/")}\?test" +
-            //    $"(\&({string.Join('|', patterns)}))+$";
 
             _urlRegex = new Regex(_callPattern);
         }

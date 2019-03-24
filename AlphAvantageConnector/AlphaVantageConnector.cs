@@ -11,6 +11,7 @@ using AlphaVantageConnector.Resources;
 using AlphaVantageConnector.Helpers;
 using AlphaVantageDto;
 using System.Linq;
+using Common.Interfaces;
 
 namespace AlphaVantageConnector
 {
@@ -25,12 +26,12 @@ namespace AlphaVantageConnector
         /// <summary>
         /// One for all to save sockets.
         /// </summary>
-        private readonly HttpClient _apiHttpClient;
+        private readonly IRateLimitHttpClient _apiHttpClient;
 
         public AlphaVantageConnector(
             IApiKeyService apiKeyService,
             IRequestCompositor requestCompositor,
-            HttpClient httpClient
+            IRateLimitHttpClient httpClient
             )
         {
             _apiHttpClient = httpClient;
@@ -43,7 +44,7 @@ namespace AlphaVantageConnector
         public async Task<(MetaData MetaData, TData Data)> RequestApiAsync<TData>(ApiFunctions function, IDictionary<ApiParameters, string> parameters = null)
         {
             var request = _requestCompositor.ComposeHttpRequest(_apiKeyService.GetKey(), function, parameters);
-            var response = await _apiHttpClient.SendAsync(request);
+            var response = await _apiHttpClient.SendWithLimitAsync(request);
 
             var jsonString = await response.Content.ReadAsStringAsync();
 
@@ -65,7 +66,7 @@ namespace AlphaVantageConnector
 
             var properties = jObject.Children().Select(ch => (JProperty)ch).ToArray();
 
-            if (properties.Length > 1)
+            if (metaData != null)
             {
                 jData = properties[1].Value;
             }

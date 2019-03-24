@@ -1,46 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Common.Interfaces;
+using System;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Common
 {
-    public class HttpClientWithRateLimit : IDisposable
+    /// <summary>
+    /// HttpClient send requests with rate limit.
+    /// </summary>
+    public class RateLimitHttpClient : HttpClient, IRateLimitHttpClient
     {
-        private HttpClient _client;
-        private TimeSpan _minRequestInterval;//Calculated based on rpm limit in constructor
+        private int _minInterval;//Calculated based on rpm limit in constructor
         private Semaphore _concurrentRequestsSemaphore;
         private object _lockObject = new object();
 
-        internal HttpClientWithRateLimit(HttpClient client, int maxRequestPerMinutes, int maxConcurrentRequests)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="minInterval">Milliseconds</param>
+        /// <param name="maxConcurrentRequests"></param>
+        internal RateLimitHttpClient(int minInterval, int maxConcurrentRequests)
         {
-            _client = client;
-            _minRequestInterval = new TimeSpan(0, 0, 0, 0, 60000 / maxRequestPerMinutes);
+            Init(minInterval, maxConcurrentRequests);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="minInterval">Milliseconds</param>
+        /// <param name="maxConcurrentRequests"></param>
+        /// <param name="handler"></param>
+        internal RateLimitHttpClient(int minInterval, int maxConcurrentRequests, HttpMessageHandler handler) : base(handler)
+        {
+            Init(minInterval, maxConcurrentRequests);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="minInterval">Milliseconds</param>
+        /// <param name="maxConcurrentRequests"></param>
+        /// <param name="handler"></param>
+        /// <param name="disposeHandler"></param>
+        internal RateLimitHttpClient(int minInterval, int maxConcurrentRequests, HttpMessageHandler handler, bool disposeHandler)
+            : base(handler, disposeHandler)
+        {
+            Init(minInterval, maxConcurrentRequests);
+        }
+
+
+        private void Init(int minInterval, int maxConcurrentRequests)
+        {
+            _minInterval = minInterval;
+
             _concurrentRequestsSemaphore = new Semaphore(maxConcurrentRequests, maxConcurrentRequests);
         }
 
-        public void Dispose()
-        {
-            _concurrentRequestsSemaphore.Dispose();
-        }
 
-
-        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+        public async Task<HttpResponseMessage> SendWithLimitAsync(HttpRequestMessage request)
         {
             HttpResponseMessage response = null;
             _concurrentRequestsSemaphore.WaitOne();
+
             try
             {
                 var watch = System.Diagnostics.Stopwatch.StartNew();
-                response = await _client.SendAsync(request);
+                response = await SendAsync(request);
                 watch.Stop();
 
                 var elapsedMs = watch.ElapsedMilliseconds;
-                if (elapsedMs < _minRequestInterval.Milliseconds)
+                if (elapsedMs < _minInterval)
                 {
-                    await Task.Delay(unchecked((int)(_minRequestInterval.Milliseconds - elapsedMs)));
+                    await Task.Delay(unchecked((int)(_minInterval - elapsedMs)));
                 }
             }
             catch
@@ -54,10 +86,10 @@ namespace Common
 
             return response;
         }
-       
+
         public void SetTimeOut(TimeSpan timeSpan)
         {
-            _client.Timeout = timeSpan;
+            Timeout = timeSpan;
         }
     }
 }

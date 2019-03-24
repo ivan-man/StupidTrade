@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AlphaVantageDto
 {
-    public class InputAdjustedSampleDto : SampleDto
+    public class SampleAdjustedDto : SampleDto
     {
         public float AdjustedClose { get; set; }
 

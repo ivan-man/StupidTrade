@@ -8,6 +8,7 @@ namespace AlphaVantageConnector.Enums
     {
         Unknown = 0,
 
+        GLOBAL_QUOTE,
         SYMBOL_SEARCH,
 
         // Stock Time Series Data
@@ -28,6 +29,7 @@ namespace AlphaVantageConnector.Enums
         DIGITAL_CURRENCY_DAILY,
         DIGITAL_CURRENCY_WEEKLY,
         DIGITAL_CURRENCY_MONTHLY,
+
 
         // Stock Technical Indicators
         SMA,

@@ -8,16 +8,19 @@ namespace AlphaVantageConnector.Helpers
         public static string ClearResponse(string response)
         {
             //remove numbers of fields
-            var result = Regex.Replace(response, @"[0-9]{1,2}\. ", string.Empty); //+||[ \t]+
+            var result = Regex.Replace(response, @"[0-9]{1,2}\. ", string.Empty); 
 
             if (response.Contains(AvResources.TimeSeries))
             {
-                Regex.Replace(result, $@"{AvResources.TimeSeries} \(({string.Join("|", Intervals.Values)})\)", "TimeSeries");
+                result = Regex.Replace(result, $@"({AvResources.TimeSeries} \([0-9a-zA-Z]+\))|([a-zA-Z]+ {AvResources.TimeSeries})", "TimeSeries");
             }
 
-            return result; //+||[ \t]+
-        }
+            if (response.Contains(AvResources.GlobalQuote))
+            {
+                result = Regex.Replace(result, $@"([ %])", string.Empty);
+            }
 
-        //public 
+            return result; 
+        }
     }
 }

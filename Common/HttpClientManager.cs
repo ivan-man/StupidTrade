@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,7 +17,18 @@ namespace Common
 
         private static ReaderWriterLockSlim _locking = new ReaderWriterLockSlim();
 
+
+        public IRateLimitHttpClient GetRateLimitClient(string baseUrl, int rateLimit, int maxConcurrentRequests)
+        {
+            return BuildClient(baseUrl, rateLimit, maxConcurrentRequests) as IRateLimitHttpClient;
+        }
+
         public HttpClient GetClient(string baseUrl)
+        {
+            return BuildClient(baseUrl);
+        }
+
+        private HttpClient BuildClient(string baseUrl, int rateLimit = 0, int maxConcurrentRequests = 0)
         {
             _locking.EnterReadLock();
 
@@ -26,10 +38,15 @@ namespace Common
 
                 _locking.EnterWriteLock();
 
-                client = new HttpClient
-                {
-                    BaseAddress = new Uri(baseUrl)
-                };
+                client = rateLimit > 0
+                    ? new RateLimitHttpClient(rateLimit, maxConcurrentRequests)
+                    {
+                        BaseAddress = new Uri(baseUrl)
+                    }
+                    : new HttpClient
+                    {
+                        BaseAddress = new Uri(baseUrl)
+                    };
 
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
