@@ -129,6 +129,37 @@ namespace AlphaVantageConnector.Interfaces
         /// <returns></returns>
         Task<Dictionary<DateTime, SmaSampleDto>> GetSmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType);
 
+
+        /// <summary>
+        /// This API returns the exponential moving average(EMA) values.
+        /// </summary>
+        /// <param name="symbol">
+        /// The name of the security of your choice.
+        /// </param>
+        /// <param name="interval">
+        /// Time interval between two consecutive data points in the time series
+        /// </param>
+        /// <param name="timePeriod">
+        /// Number of data points used to calculate each moving average value. 
+        /// Positive integers are accepted (e.g., time_period=60, time_period=200)
+        /// </param>
+        /// <param name="seriesType"></param>
+        /// <returns></returns>
+        Task<Dictionary<DateTime, EmaSampleDto>> GetEmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType);
+
+
+        /// <summary>
+        /// This API returns the volume weighted average price (VWAP) for intraday time series. 
+        /// </summary>
+        /// <param name="symbol">
+        /// The name of the security of your choice.
+        /// </param>
+        /// <param name="interval">
+        /// Time interval between two consecutive data points in the time series
+        /// </param>
+        /// <returns></returns>
+        Task<Dictionary<DateTime, VwapSampleDto>> GetVwapAsync(string symbol, IntervalsEnum interval);
+
         #endregion Technical indicators
     }
 }

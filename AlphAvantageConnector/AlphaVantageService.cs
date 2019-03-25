@@ -346,6 +346,88 @@ namespace AlphaVantageConnector
             var response = await _connector.RequestApiAsync<Dictionary<DateTime, SmaSampleDto>>(function, parameters);
             return response.Data;
         }
+
+        /// <summary>
+        /// This API returns the exponential moving average(EMA) values.
+        /// </summary>
+        /// <param name="symbol">
+        /// The name of the security of your choice.
+        /// </param>
+        /// <param name="interval">
+        /// Time interval between two consecutive data points in the time series
+        /// </param>
+        /// <param name="timePeriod">
+        /// Number of data points used to calculate each moving average value. 
+        /// Positive integers are accepted (e.g., time_period=60, time_period=200)
+        /// </param>
+        /// <param name="seriesType"></param>
+        /// <returns></returns>
+        public async Task<Dictionary<DateTime, EmaSampleDto>> GetEmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType)
+        {
+            if (string.IsNullOrEmpty(symbol))
+            {
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+            }
+
+            if (interval == IntervalsEnum.Unknown)
+            {
+                throw new ArgumentException($"Incorrect {nameof(interval)}.");
+            }
+
+            if (timePeriod < 1)
+            {
+                throw new ArgumentException($"Incorrect {nameof(timePeriod)}.");
+            }
+
+            var function = ApiFunctions.EMA;
+
+            var parameters = new Dictionary<ApiParameters, string>
+            {
+                { ApiParameters.Symbol, symbol },
+                { ApiParameters.Interval, Intervals.Values[interval] },
+                { ApiParameters.TimePeriod, timePeriod.ToString() },
+                { ApiParameters.SeriesType, seriesType.ToLower() },
+            };
+
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, EmaSampleDto>>(function, parameters);
+            return response.Data;
+        }
+
+        /// <summary>
+        /// This API returns the volume weighted average price (VWAP) for intraday time series. 
+        /// </summary>
+        /// <param name="symbol">
+        /// The name of the security of your choice.
+        /// </param>
+        /// <param name="interval">
+        /// Time interval between two consecutive data points in the time series
+        /// </param>
+        /// <returns></returns>
+        public async Task<Dictionary<DateTime, VwapSampleDto>> GetVwapAsync(string symbol, IntervalsEnum interval)
+        {
+            if (string.IsNullOrEmpty(symbol))
+            {
+                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+            }
+
+            if (interval == IntervalsEnum.Unknown)
+            {
+                throw new ArgumentException($"Incorrect {nameof(interval)}.");
+            }
+
+            var function = ApiFunctions.VWAP;
+
+            var parameters = new Dictionary<ApiParameters, string>
+            {
+                { ApiParameters.Symbol, symbol },
+                { ApiParameters.Interval, Intervals.Values[interval] },
+            };
+
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, VwapSampleDto>>(function, parameters);
+            return response.Data;
+        }
+
+
         #endregion Technical indicators
 
 

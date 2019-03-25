@@ -1,0 +1,26 @@
+{
+  "Meta Data": {
+    "1: Symbol": "MSFT",
+    "2: Indicator": "Volume Weighted Average Price (VWAP)",
+    "3: Last Refreshed": "2019-03-25 15:45:00",
+    "4: Interval": "15min",
+    "5: Time Zone": "US/Eastern"
+  },
+  "Technical Analysis: VWAP": {
+    "2019-03-25 15:45": {
+      "VWAP": "117.3389"
+    },
+    "2019-03-25 15:30": {
+      "VWAP": "117.3222"
+    },
+    "2019-03-25 15:15": {
+      "VWAP": "117.3073"
+    },
+    "2019-03-25 15:00": {
+      "VWAP": "117.2839"
+    },
+    "2019-03-25 14:45": {
+      "VWAP": "117.2789"
+    }
+  }
+}

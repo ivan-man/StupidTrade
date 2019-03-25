@@ -40,6 +40,7 @@ namespace AlphaVantageConnector.Enums
         TRIMA,
         KAMA,
         MAMA,
+        VWAP,
         T3,
         MACD,
         MACDEXT,

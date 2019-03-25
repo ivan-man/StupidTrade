@@ -244,6 +244,26 @@ namespace AlphaVantageConnectorTests
             Assert.True(result.Any());
         }
 
+        [Fact]
+        public async Task GetEmaTest()
+        {
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
+            var result = await _alphaVantageServiceReal.GetEmaAsync(_testSymbol, IntervalsEnum.FiveMin, 60, SeriesType.Close);
+
+            Assert.NotNull(result);
+            Assert.True(result.Any());
+        }
+
+        [Fact]
+        public async Task GetVwapTest()
+        {
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
+            var result = await _alphaVantageServiceReal.GetVwapAsync(_testSymbol, IntervalsEnum.FiveMin);
+
+            Assert.NotNull(result);
+            Assert.True(result.Any());
+        }
+
         #endregion Technical indicators
     }
 }
