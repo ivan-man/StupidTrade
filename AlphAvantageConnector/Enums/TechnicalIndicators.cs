@@ -1,6 +1,9 @@
 ﻿
 namespace AlphaVantageConnector.Enums
 {
+    /// <summary>
+    /// It's duplicate part of ApiFunctions enum and using for desserialization only.
+    /// </summary>
     public enum TechnicalIndicators
     {
         SMA,

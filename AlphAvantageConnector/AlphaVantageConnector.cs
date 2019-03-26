@@ -57,7 +57,20 @@ namespace AlphaVantageConnector
             if (jObject.ContainsKey(AvResources.MetaDataHeader))
             {
                 var metaDataJT = jObject[AvResources.MetaDataHeader];
-                metaData = metaDataJT.ToObject<MetaData>();
+
+                try
+                {
+                    metaData = metaDataJT.ToObject<MetaData>();
+                }
+                catch (Exception e)
+                {
+                    //for debug
+                    metaData = new MetaData
+                    {
+                        IsBroken = true,
+                        Information = $"{e.Message}",
+                    };
+                }
             }
 
             AssertNotBadRequest(jObject);
@@ -82,6 +95,7 @@ namespace AlphaVantageConnector
             }
             catch (Exception e)
             {
+                //for debug
                 throw;
             }
         }

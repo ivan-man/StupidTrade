@@ -115,6 +115,96 @@ namespace AlphaVantageConnector.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rank A: Real-Time Performance.
+        /// </summary>
+        internal static string PerformanceRankA {
+            get {
+                return ResourceManager.GetString("PerformanceRankA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank B: 1 Day Performance.
+        /// </summary>
+        internal static string PerformanceRankB {
+            get {
+                return ResourceManager.GetString("PerformanceRankB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank C: 5 Day Performance.
+        /// </summary>
+        internal static string PerformanceRankC {
+            get {
+                return ResourceManager.GetString("PerformanceRankC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank D: 1 Month Performance.
+        /// </summary>
+        internal static string PerformanceRankD {
+            get {
+                return ResourceManager.GetString("PerformanceRankD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank E: 3 Month Performance.
+        /// </summary>
+        internal static string PerformanceRankE {
+            get {
+                return ResourceManager.GetString("PerformanceRankE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank F: Year-to-Date (YTD) Performance.
+        /// </summary>
+        internal static string PerformanceRankF {
+            get {
+                return ResourceManager.GetString("PerformanceRankF", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank G: 1 Year Performance.
+        /// </summary>
+        internal static string PerformanceRankG {
+            get {
+                return ResourceManager.GetString("PerformanceRankG", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank H: 3 Year Performance.
+        /// </summary>
+        internal static string PerformanceRankH {
+            get {
+                return ResourceManager.GetString("PerformanceRankH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank I: 5 Year Performance.
+        /// </summary>
+        internal static string PerformanceRankI {
+            get {
+                return ResourceManager.GetString("PerformanceRankI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank J: 10 Year Performance.
+        /// </summary>
+        internal static string PerformanceRankJ {
+            get {
+                return ResourceManager.GetString("PerformanceRankJ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keyword is empty..
         /// </summary>
         internal static string SymbolSearchInputEmptyEx {

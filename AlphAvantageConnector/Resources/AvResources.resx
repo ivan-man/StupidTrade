@@ -135,6 +135,36 @@
   <data name="MetaDataHeader" xml:space="preserve">
     <value>Meta Data</value>
   </data>
+  <data name="PerformanceRankA" xml:space="preserve">
+    <value>Rank A: Real-Time Performance</value>
+  </data>
+  <data name="PerformanceRankB" xml:space="preserve">
+    <value>Rank B: 1 Day Performance</value>
+  </data>
+  <data name="PerformanceRankC" xml:space="preserve">
+    <value>Rank C: 5 Day Performance</value>
+  </data>
+  <data name="PerformanceRankD" xml:space="preserve">
+    <value>Rank D: 1 Month Performance</value>
+  </data>
+  <data name="PerformanceRankE" xml:space="preserve">
+    <value>Rank E: 3 Month Performance</value>
+  </data>
+  <data name="PerformanceRankF" xml:space="preserve">
+    <value>Rank F: Year-to-Date (YTD) Performance</value>
+  </data>
+  <data name="PerformanceRankG" xml:space="preserve">
+    <value>Rank G: 1 Year Performance</value>
+  </data>
+  <data name="PerformanceRankH" xml:space="preserve">
+    <value>Rank H: 3 Year Performance</value>
+  </data>
+  <data name="PerformanceRankI" xml:space="preserve">
+    <value>Rank I: 5 Year Performance</value>
+  </data>
+  <data name="PerformanceRankJ" xml:space="preserve">
+    <value>Rank J: 10 Year Performance</value>
+  </data>
   <data name="SymbolSearchInputEmptyEx" xml:space="preserve">
     <value>Keyword is empty.</value>
   </data>

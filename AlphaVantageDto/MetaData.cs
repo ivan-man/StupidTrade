@@ -6,6 +6,11 @@ namespace AlphaVantageDto
 {
     public class MetaData
     {
+        /// <summary>
+        /// True on Exception while deserializing
+        /// </summary>
+        public bool IsBroken { get; set; }
+
         public string Information { get; set; }
 
         public string Indicator { get; set; }

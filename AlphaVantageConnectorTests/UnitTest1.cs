@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -52,7 +53,8 @@ namespace AlphaVantageConnectorTests
 
         private void Init()
         {
-            _apiHttpClient = _clientManagerReal.GetRateLimitClient(@"https://www.alphavantage.co/query", 10000, 7);
+            var interval = 1000; //if you run all tests, set it 10000+ miliseconds, or use several keys
+            _apiHttpClient = _clientManagerReal.GetRateLimitClient(@"https://www.alphavantage.co/query", interval, 7);
 
             _apiCallValidatorMock.Setup(q => q.Validate(It.IsAny<string>())).Returns(true);
 
@@ -262,6 +264,16 @@ namespace AlphaVantageConnectorTests
 
             Assert.NotNull(result);
             Assert.True(result.Any());
+        }
+
+        [Fact]
+        public async Task GetSectorTest()
+        {
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
+            var result = await _alphaVantageServiceReal.GetSectorAsync();
+
+            Assert.NotNull(result);
+            Assert.True(result.Any() && result.Count == Enum.GetValues(typeof(PerfomanceRank)).Length);
         }
 
         #endregion Technical indicators

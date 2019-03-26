@@ -161,5 +161,13 @@ namespace AlphaVantageConnector.Interfaces
         Task<Dictionary<DateTime, VwapSampleDto>> GetVwapAsync(string symbol, IntervalsEnum interval);
 
         #endregion Technical indicators
+
+        #region Sector
+        /// <summary>
+        /// This API returns the realtime and historical sector performances calculated from S&P500 incumbents. 
+        /// </summary>
+        /// <returns></returns>
+        Task<Dictionary<PerfomanceRank, PerformanceDto>> GetSectorAsync();
+        #endregion Sector
     }
 }

@@ -430,7 +430,21 @@ namespace AlphaVantageConnector
 
         #endregion Technical indicators
 
+        #region Sector
+        /// <summary>
+        /// This API returns the realtime and historical sector performances calculated from S&P500 incumbents. 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<Dictionary<PerfomanceRank, PerformanceDto>> GetSectorAsync()
+        {
+            var function = ApiFunctions.SECTOR;
 
+            var response = await _connector.RequestApiAsync<Dictionary<PerfomanceRank, PerformanceDto>>(function, null);
+
+            return response.Data;
+        }
+
+        #endregion Sector
 
         #region Forex (not implemented)
         #endregion Forex
