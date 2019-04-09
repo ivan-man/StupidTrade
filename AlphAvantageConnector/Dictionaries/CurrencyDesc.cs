@@ -33,9 +33,9 @@ namespace AlphaVantageConnector.Dictionaries
 
         public static string GetSescripton(Currency currency)
         {
-            _descriptions.TryGetValue(currency, out var desk);
+            _descriptions.TryGetValue(currency, out var desc);
 
-            return desk;
+            return desc;
         }
     }
 }
