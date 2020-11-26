@@ -70,6 +70,7 @@ namespace AlphaVantageConnector
                         IsBroken = true,
                         Information = $"{e.Message}",
                     };
+
                 }
             }
 

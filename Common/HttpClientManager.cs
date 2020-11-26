@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 
 namespace Common
 {
     /// <summary>
-    /// Distribution of HttpClient
+    /// Управление соединениями, с возможностью настройки каждого, 
+    /// чтобы не попадать под ограничения демо-версий.
     /// </summary>
     public class HttpClientManager
     {
@@ -39,14 +39,8 @@ namespace Common
                 _locking.EnterWriteLock();
 
                 client = rateLimit > 0
-                    ? new RateLimitHttpClient(rateLimit, maxConcurrentRequests)
-                    {
-                        BaseAddress = new Uri(baseUrl)
-                    }
-                    : new HttpClient
-                    {
-                        BaseAddress = new Uri(baseUrl)
-                    };
+                    ? new RateLimitHttpClient(rateLimit, maxConcurrentRequests) { BaseAddress = new Uri(baseUrl) }
+                    : new HttpClient { BaseAddress = new Uri(baseUrl) };
 
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

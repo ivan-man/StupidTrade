@@ -6,7 +6,6 @@ using AlphaVantageDto.Enums;
 using Common.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AlphaVantageConnector
@@ -27,21 +26,25 @@ namespace AlphaVantageConnector
         /// <summary>
         /// This API returns intraday time series (timestamp, open, high, low, close, volume) of the equity specified. 
         /// </summary>
+        /// <param name="symbol"></param>
+        /// <param name="interval"></param>
+        /// <param name="outputSize"></param>
+        /// <returns></returns>
         public async Task<Dictionary<DateTime, SampleDto>> GetIntradaySeriesAsync(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full)
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             if (outputSize == OutputSize.None)
             {
-                throw new ArgumentException($"Incorrect {nameof(outputSize)}.");
+                throw new ArgumentException(nameof(outputSize));
             }
 
             if (interval == IntervalsEnum.Unknown)
             {
-                throw new ArgumentException($"Incorrect {nameof(interval)}.");
+                throw new ArgumentException(nameof(interval));
             }
 
             var function = ApiFunctions.TIME_SERIES_INTRADAY;
@@ -77,12 +80,12 @@ namespace AlphaVantageConnector
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             if (outputSize == OutputSize.None)
             {
-                throw new ArgumentException($"Incorrect {nameof(outputSize)}.");
+                throw new ArgumentException(nameof(outputSize));
             }
 
             var function = ApiFunctions.TIME_SERIES_DAILY;
@@ -117,12 +120,12 @@ namespace AlphaVantageConnector
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             if (outputSize == OutputSize.None)
             {
-                throw new ArgumentException($"Incorrect {nameof(outputSize)}.");
+                throw new ArgumentException(nameof(outputSize));
             }
 
             var function = ApiFunctions.TIME_SERIES_DAILY_ADJUSTED;
@@ -150,7 +153,7 @@ namespace AlphaVantageConnector
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             var function = ApiFunctions.TIME_SERIES_WEEKLY;
@@ -178,7 +181,7 @@ namespace AlphaVantageConnector
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             var function = ApiFunctions.TIME_SERIES_WEEKLY_ADJUSTED;
@@ -205,7 +208,7 @@ namespace AlphaVantageConnector
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             var function = ApiFunctions.TIME_SERIES_MONTHLY;
@@ -232,7 +235,7 @@ namespace AlphaVantageConnector
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             var function = ApiFunctions.TIME_SERIES_MONTHLY_ADJUSTED;
@@ -258,7 +261,7 @@ namespace AlphaVantageConnector
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             var function = ApiFunctions.GLOBAL_QUOTE;
@@ -318,19 +321,19 @@ namespace AlphaVantageConnector
         /// <returns></returns>
         public async Task<Dictionary<DateTime, SmaSampleDto>> GetSmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType)
         {
-            if (string.IsNullOrEmpty(symbol))
+            if (string.IsNullOrWhiteSpace(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             if (interval == IntervalsEnum.Unknown)
             {
-                throw new ArgumentException($"Incorrect {nameof(interval)}.");
+                throw new ArgumentOutOfRangeException(nameof(interval));
             }
 
             if (timePeriod < 1)
             {
-                throw new ArgumentException($"Incorrect {nameof(timePeriod)}.");
+                throw new ArgumentOutOfRangeException(nameof(timePeriod));
             }
 
             var function = ApiFunctions.SMA;
@@ -366,17 +369,17 @@ namespace AlphaVantageConnector
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             if (interval == IntervalsEnum.Unknown)
             {
-                throw new ArgumentException($"Incorrect {nameof(interval)}.");
+                throw new ArgumentOutOfRangeException(nameof(interval));
             }
 
             if (timePeriod < 1)
             {
-                throw new ArgumentException($"Incorrect {nameof(timePeriod)}.");
+                throw new ArgumentOutOfRangeException(nameof(timePeriod));
             }
 
             var function = ApiFunctions.EMA;
@@ -407,12 +410,12 @@ namespace AlphaVantageConnector
         {
             if (string.IsNullOrEmpty(symbol))
             {
-                throw new ArgumentNullException($"Empty {nameof(symbol)}.");
+                throw new ArgumentNullException(nameof(symbol));
             }
 
             if (interval == IntervalsEnum.Unknown)
             {
-                throw new ArgumentException($"Incorrect {nameof(interval)}.");
+                throw new ArgumentException(nameof(interval));
             }
 
             var function = ApiFunctions.VWAP;
