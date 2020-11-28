@@ -1,5 +1,6 @@
 ﻿using AlphaVantageConnector.Enums;
 using AlphaVantageConnector.Interfaces;
+using AlphaVantageDto;
 using AlphaVantageDto.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace AnalyticsApi.Controllers
         /// Positive integers are accepted (e.g., time_period=60, time_period=200)
         /// </param>
         /// <param name="seriesType"></param>
-        /// <returns></returns>
+        /// <returns>List of <see cref="SmaSampleDto"/>.</returns>
         //[Authorize]
         [HttpGet]
         [Route("api/GetSma")]

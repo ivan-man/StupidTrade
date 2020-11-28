@@ -50,7 +50,7 @@ namespace AlphaVantageConnector.Validation
 
             var apiFunctionsPattern = $"{ApiParametersDic.GetWord(ApiParameters.Function)}=({string.Join("|", apiFunctions.Where(q => q > 0).Select(q => q.ToString()))})";
 
-            var symbolPattern = $"{ApiParametersDic.GetWord(ApiParameters.Symbol)}=([0-9A-Z.-]" + "{3,})"; //numbers?
+            var symbolPattern = $"{ApiParametersDic.GetWord(ApiParameters.Symbol)}=([0-9a-zA-Z.-]" + "{3,})"; //numbers?
             patterns.Add(symbolPattern);
 
             var intervalsPattern = $"{ApiParametersDic.GetWord(ApiParameters.Interval)}=({string.Join("|", Intervals.Values)})";
@@ -62,7 +62,7 @@ namespace AlphaVantageConnector.Validation
             var apikeyPattern = $"{ApiParametersDic.GetWord(ApiParameters.ApiKey)}=(([0-9A-Z]" + "{16})|demo)";
             patterns.Add(apikeyPattern);
 
-            var symbolsPattern = $"({ApiParametersDic.GetWord(ApiParameters.FromSymbol)}|{ApiParametersDic.GetWord(ApiParameters.ToSymbol)})=([0-9]" + "{3,})" + "([a-z]" + "{1,})";
+            var symbolsPattern = $"({ApiParametersDic.GetWord(ApiParameters.FromSymbol)}|{ApiParametersDic.GetWord(ApiParameters.ToSymbol)})=([0-9]" + "{3,5})" + "([a-zA-Z]" + "{1,5})";
             patterns.Add(symbolsPattern);
 
             var dataTypePattern = $"{ApiParametersDic.GetWord(ApiParameters.DataType)}=({string.Join("|", Enum.GetNames(typeof(GettingDataType))).ToLower()})";
@@ -96,8 +96,7 @@ namespace AlphaVantageConnector.Validation
                 $"|{ApiParametersDic.GetWord(ApiParameters.SlowKmaType)}" +
                 $"|{ApiParametersDic.GetWord(ApiParameters.FastDmaType)}" +
                 $"|{ApiParametersDic.GetWord(ApiParameters.FastDPeriod)}" +
-                $"|{ApiParametersDic.GetWord(ApiParameters.TimePeriod)}([0-9]{0,1})" +
-                ")=([0-9]{1,4})";
+                $"|{ApiParametersDic.GetWord(ApiParameters.TimePeriod)}([0-9]" + "{0,1})" + ")=([0-9]{1,4})";
             patterns.Add(integersPattern);
 
             _callPattern =
@@ -109,10 +108,6 @@ namespace AlphaVantageConnector.Validation
 
         public static bool IsValid(string url)
         {
-            return true;
-            
-            //https://www.alphavantage.co/query?function=SMA&apikey=KI1XY2ZHGP7R1HYU&symbol=baba&interval=60min&time_period=5&series_type=high
-            //ToDo Debug and fix
             if (!_urlRegex.IsMatch(url))
             {
                 var e = new Exception(AvResources.IncorrectFunctionNameValidateError);

@@ -1,20 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
+using System.Reflection;
 using AlphaVantageConnector;
 using AlphaVantageConnector.Interfaces;
-using AlphaVantageConnector.Validation;
 using Common;
 using Common.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace AnalyticsApi
 {
@@ -38,7 +35,16 @@ namespace AnalyticsApi
             services.AddScoped<IAlphaVantageService, AlphaVantageService>();
 
             services.AddControllers();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(q =>
+            {
+                q.SwaggerDoc("v1", new OpenApiInfo { Title = "Analytics API V0.01", Version = "0.01" });
+
+                var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                var commentsFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var commentsFile = Path.Combine(baseDirectory, commentsFileName);
+
+                q.IncludeXmlComments(commentsFile);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +60,6 @@ namespace AnalyticsApi
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Analytics API V0.01");
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;
             });
 

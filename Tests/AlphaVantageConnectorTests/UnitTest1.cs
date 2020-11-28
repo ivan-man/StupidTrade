@@ -67,9 +67,9 @@ namespace AlphaVantageConnectorTests
 
             var informationDto = response.Data;
 
-            Assert.AreEqual(
-                "The **demo** API key is for demo purposes only. Please claim your free API key at (https://www.alphavantage.co/support/#api-key) to explore our full API offerings. It takes fewer than 20 seconds, and we are committed to making it free forever.",
-                informationDto?.Information);
+            var demoMessage = "The **demo** API key is for demo purposes only. Please claim your free API key at (https://www.alphavantage.co/support/#api-key) to explore our full API offerings. It takes fewer than 20 seconds, and we are committed to making it free forever.";
+
+            Assert.AreEqual(demoMessage, informationDto?.Information);
         }
 
 
@@ -239,7 +239,8 @@ namespace AlphaVantageConnectorTests
         [Test]
         public async Task GetQuoteEndpointTest()
         {
-            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
+            var key = _realKeySrvice.GetKey();
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(key);
             var result = await _alphaVantageServiceReal.GetQuoteEndpointAsync(_testSymbol);
 
             Assert.NotNull(result);
@@ -251,7 +252,8 @@ namespace AlphaVantageConnectorTests
         [Test]
         public async Task GetSmaTest()
         {
-            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
+            var key = _realKeySrvice.GetKey();
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(key);
             var result = await _alphaVantageServiceReal.GetSmaAsync(_testSymbol, IntervalsEnum.FiveMin, 60, SeriesType.Close);
 
             Assert.NotNull(result);
