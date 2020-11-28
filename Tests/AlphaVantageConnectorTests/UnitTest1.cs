@@ -27,7 +27,6 @@ namespace AlphaVantageConnectorTests
         private const string normalSizeKey = "0123456789ABCDEF";
 
 
-        private readonly HttpClientManager _clientManagerReal = new HttpClientManager();
         private IRateLimitHttpClient _apiHttpClient;
 
         private IApiKeyService _realKeySrvice = new ApiKeyService();
@@ -50,13 +49,12 @@ namespace AlphaVantageConnectorTests
             Init();
         }
 
-
         private void Init()
         {
             var interval = 1000; //if you run all tests, set it 10000+ miliseconds, or use several keys
-            _apiHttpClient = _clientManagerReal.GetRateLimitClient(@"https://www.alphavantage.co/query", interval, 7);
+            _apiHttpClient = HttpClientManager.GetRateLimitClient(@"https://www.alphavantage.co/query", interval, 7);
 
-            _apiCallValidatorMock.Setup(q => q.Validate(It.IsAny<string>())).Returns(true);
+            _apiCallValidatorMock.Setup(q => q.IsValid(It.IsAny<string>())).Returns(true);
 
             _apiCallValidatorReal = new ApiCallValidator();
             _requestCompositorReal = new RequestCompositor(_apiCallValidatorReal);
@@ -64,10 +62,9 @@ namespace AlphaVantageConnectorTests
             _connectorReal = new AlphaVantageConnector.AlphaVantageConnector(_apiKeyServiceMock.Object, _requestCompositorReal, _apiHttpClient);
 
             _alphaVantageServiceReal = new AlphaVantageService(_connectorReal);
-
         }
 
-        #region CcoreTests
+        #region CoreTests
 
         [Fact]
         public async Task InformationAboutFreeKeyTest()
@@ -96,7 +93,7 @@ namespace AlphaVantageConnectorTests
         {
             var connector = new AlphaVantageConnector.AlphaVantageConnector(_apiKeyServiceReal, _requestCompositorReal, _apiHttpClient);
 
-            var response = await connector.RequestApiAsync<Dictionary<DateTime, SampleDto>>(ApiFunctions.TIME_SERIES_WEEKLY, new Dictionary<ApiParameters, string>
+            var response = await connector.RequestApiAsync<Dictionary<DateTime, SampleAlphaDto>>(ApiFunctions.TIME_SERIES_WEEKLY, new Dictionary<ApiParameters, string>
             {
                 { ApiParameters.Symbol, _testSymbol }
             });

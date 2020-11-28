@@ -1,6 +1,6 @@
 ﻿using Common.Interfaces;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -13,12 +13,11 @@ namespace Common
     /// </summary>
     public class HttpClientManager
     {
-        private Dictionary<string, HttpClient> _clients = new Dictionary<string, HttpClient>();
+        private static ConcurrentDictionary<string, HttpClient> _clients = new ConcurrentDictionary<string, HttpClient>();
 
         private static ReaderWriterLockSlim _locking = new ReaderWriterLockSlim();
 
-
-        public IRateLimitHttpClient GetRateLimitClient(string baseUrl, int rateLimit, int maxConcurrentRequests)
+        public static IRateLimitHttpClient GetRateLimitClient(string baseUrl, int rateLimit, int maxConcurrentRequests)
         {
             return BuildClient(baseUrl, rateLimit, maxConcurrentRequests) as IRateLimitHttpClient;
         }
@@ -28,7 +27,7 @@ namespace Common
             return BuildClient(baseUrl);
         }
 
-        private HttpClient BuildClient(string baseUrl, int rateLimit = 0, int maxConcurrentRequests = 0)
+        private static HttpClient BuildClient(string baseUrl, int rateLimit = 0, int maxConcurrentRequests = 0)
         {
             _locking.EnterReadLock();
 
@@ -45,7 +44,7 @@ namespace Common
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                _clients.Add(baseUrl, client);
+                _clients.TryAdd(baseUrl, client);
 
                 _locking.ExitWriteLock();
             }

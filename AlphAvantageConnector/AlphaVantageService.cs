@@ -6,6 +6,7 @@ using AlphaVantageDto.Enums;
 using Common.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AlphaVantageConnector
@@ -24,13 +25,13 @@ namespace AlphaVantageConnector
 
         #region StockTimeSeries
         /// <summary>
-        /// This API returns intraday time series (timestamp, open, high, low, close, volume) of the equity specified. 
+        /// Returns intraday time series (timestamp, open, high, low, close, volume) of the equity specified. 
         /// </summary>
         /// <param name="symbol"></param>
         /// <param name="interval"></param>
         /// <param name="outputSize"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleDto>> GetIntradaySeriesAsync(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full)
+        public async Task<List<SampleDto>> GetIntradaySeriesAsync(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full)
         {
             if (string.IsNullOrEmpty(symbol))
             {
@@ -56,8 +57,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.OutputSize, outputSize.ToLower() },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (SampleDto) q).ToList();
         }
 
 
@@ -76,7 +77,7 @@ namespace AlphaVantageConnector
         /// The "compact" option is recommended if you would like to reduce the data size of each API call. 
         /// </param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleDto>> GetDailyTimeSeriesAsync(string symbol, OutputSize outputSize = OutputSize.Compact)
+        public async Task<List<SampleDto>> GetDailyTimeSeriesAsync(string symbol, OutputSize outputSize = OutputSize.Compact)
         {
             if (string.IsNullOrEmpty(symbol))
             {
@@ -96,8 +97,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.OutputSize, outputSize.ToLower() },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (SampleDto) q).ToList();
         }
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace AlphaVantageConnector
         /// The "compact" option is recommended if you would like to reduce the data size of each API call. 
         /// </param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleAdjustedDto>> GetDailyTimeSeriesAdjustedAsync(string symbol, OutputSize outputSize = OutputSize.Compact)
+        public async Task<List<SampleAdjustedDto>> GetDailyTimeSeriesAdjustedAsync(string symbol, OutputSize outputSize = OutputSize.Compact)
         {
             if (string.IsNullOrEmpty(symbol))
             {
@@ -136,8 +137,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.OutputSize, outputSize.ToLower() },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAdjustedDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAdjustedAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (SampleAdjustedDto) q).ToList();
         }
 
 
@@ -149,7 +150,7 @@ namespace AlphaVantageConnector
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleDto>> GetWeeklyTimeSeriesAsync(string symbol)
+        public async Task<List<SampleDto>> GetWeeklyTimeSeriesAsync(string symbol)
         {
             if (string.IsNullOrEmpty(symbol))
             {
@@ -163,8 +164,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.Symbol, symbol },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (SampleDto) q).ToList();
         }
 
 
@@ -177,7 +178,7 @@ namespace AlphaVantageConnector
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleAdjustedDto>> GetWeeklyTimeSeriesAdjustedAsync(string symbol)
+        public async Task<List<SampleAdjustedDto>> GetWeeklyTimeSeriesAdjustedAsync(string symbol)
         {
             if (string.IsNullOrEmpty(symbol))
             {
@@ -191,8 +192,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.Symbol, symbol },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAdjustedDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAdjustedAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (SampleAdjustedDto) q).ToList();
         }
 
 
@@ -204,7 +205,7 @@ namespace AlphaVantageConnector
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleDto>> GetMonthlyTimeSeriesAsync(string symbol)
+        public async Task<List<SampleDto>> GetMonthlyTimeSeriesAsync(string symbol)
         {
             if (string.IsNullOrEmpty(symbol))
             {
@@ -218,8 +219,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.Symbol, symbol },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (SampleDto) q).ToList();
         }
 
         /// <summary>
@@ -231,7 +232,7 @@ namespace AlphaVantageConnector
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SampleAdjustedDto>> GetMonthlyTimeSeriesAdjustedAsync(string symbol)
+        public async Task<List<SampleAdjustedDto>> GetMonthlyTimeSeriesAdjustedAsync(string symbol)
         {
             if (string.IsNullOrEmpty(symbol))
             {
@@ -245,8 +246,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.Symbol, symbol },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAdjustedDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SampleAdjustedAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (SampleAdjustedDto) q).ToList();
         }
 
 
@@ -279,7 +280,7 @@ namespace AlphaVantageConnector
         /// Search symbols.
         /// </summary>
         /// <param name="input"></param>
-        public async Task<IEnumerable<SymbolDto>> SearchSymbolAsync(string input)
+        public async Task<List<SymbolDto>> SearchSymbolAsync(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
@@ -296,7 +297,7 @@ namespace AlphaVantageConnector
             };
 
             var response = await _connector.RequestApiAsync<SymbolBestMatchesDto>(function, parameters);
-            return response.Data.BestMatches;
+            return response.Data.BestMatches.ToList();
         }
 
         #endregion StockTimeSeries
@@ -319,7 +320,7 @@ namespace AlphaVantageConnector
         /// </param>
         /// <param name="seriesType"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, SmaSampleDto>> GetSmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType)
+        public async Task<List<SmaSampleDto>> GetSmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType)
         {
             if (string.IsNullOrWhiteSpace(symbol))
             {
@@ -346,8 +347,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.SeriesType, seriesType.ToLower() },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SmaSampleDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, SmaSampleAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (SmaSampleDto)q).ToList();
         }
 
         /// <summary>
@@ -365,7 +366,7 @@ namespace AlphaVantageConnector
         /// </param>
         /// <param name="seriesType"></param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, EmaSampleDto>> GetEmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType)
+        public async Task<List<EmaSampleDto>> GetEmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType)
         {
             if (string.IsNullOrEmpty(symbol))
             {
@@ -392,8 +393,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.SeriesType, seriesType.ToLower() },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, EmaSampleDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, EmaSampleAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (EmaSampleDto)q).ToList();
         }
 
         /// <summary>
@@ -406,7 +407,7 @@ namespace AlphaVantageConnector
         /// Time interval between two consecutive data points in the time series
         /// </param>
         /// <returns></returns>
-        public async Task<Dictionary<DateTime, VwapSampleDto>> GetVwapAsync(string symbol, IntervalsEnum interval)
+        public async Task<List<VwapSampleDto>> GetVwapAsync(string symbol, IntervalsEnum interval)
         {
             if (string.IsNullOrEmpty(symbol))
             {
@@ -426,8 +427,8 @@ namespace AlphaVantageConnector
                 { ApiParameters.Interval, Intervals.Values[interval] },
             };
 
-            var response = await _connector.RequestApiAsync<Dictionary<DateTime, VwapSampleDto>>(function, parameters);
-            return response.Data;
+            var response = await _connector.RequestApiAsync<Dictionary<DateTime, VwapSampleAlphaDto>>(function, parameters);
+            return response.Data.Select(q => (VwapSampleDto)q).ToList();
         }
 
 
@@ -438,13 +439,13 @@ namespace AlphaVantageConnector
         /// This API returns the realtime and historical sector performances calculated from S&P500 incumbents. 
         /// </summary>
         /// <returns></returns>
-        public async Task<Dictionary<PerfomanceRank, PerformanceDto>> GetSectorAsync()
+        public async Task<List<PerformanceDto>> GetSectorAsync()
         {
             var function = ApiFunctions.SECTOR;
 
-            var response = await _connector.RequestApiAsync<Dictionary<PerfomanceRank, PerformanceDto>>(function, null);
+            var response = await _connector.RequestApiAsync<Dictionary<PerfomanceRank, PerformanceAlphaDto>>(function, null);
 
-            return response.Data;
+            return response.Data.Select(q => (PerformanceDto)q).ToList();
         }
 
         #endregion Sector

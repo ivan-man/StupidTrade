@@ -12,7 +12,7 @@ namespace AlphaVantageConnector.Interfaces
         /// <summary>
         /// This API returns intraday time series (timestamp, open, high, low, close, volume) of the equity specified. 
         /// </summary>
-        Task<Dictionary<DateTime, SampleDto>> GetIntradaySeriesAsync(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full);
+        Task<List<SampleDto>> GetIntradaySeriesAsync(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full);
 
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </param>
         /// <returns></returns>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleDto>> GetDailyTimeSeriesAsync(string symbol, OutputSize outputSize = OutputSize.Compact);
+        Task<List<SampleDto>> GetDailyTimeSeriesAsync(string symbol, OutputSize outputSize = OutputSize.Compact);
 
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace AlphaVantageConnector.Interfaces
         /// The "compact" option is recommended if you would like to reduce the data size of each API call. 
         /// </param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleAdjustedDto>> GetDailyTimeSeriesAdjustedAsync(string symbol, OutputSize outputSize = OutputSize.Compact);
+        Task<List<SampleAdjustedDto>> GetDailyTimeSeriesAdjustedAsync(string symbol, OutputSize outputSize = OutputSize.Compact);
 
         /// <summary>
         /// This API returns weekly time series (last trading day of each week, weekly open, weekly high, weekly low, weekly close, weekly volume) 
@@ -60,7 +60,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleDto>> GetWeeklyTimeSeriesAsync(string symbol);
+        Task<List<SampleDto>> GetWeeklyTimeSeriesAsync(string symbol);
 
         /// <summary>
         /// This API returns weekly adjusted time series
@@ -71,7 +71,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleAdjustedDto>> GetWeeklyTimeSeriesAdjustedAsync(string symbol);
+        Task<List<SampleAdjustedDto>> GetWeeklyTimeSeriesAdjustedAsync(string symbol);
 
         /// <summary>
         /// This API returns monthly time series (last trading day of each month, monthly open, monthly high, monthly low, monthly close, monthly volume) 
@@ -81,7 +81,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleDto>> GetMonthlyTimeSeriesAsync(string symbol);
+        Task<List<SampleDto>> GetMonthlyTimeSeriesAsync(string symbol);
 
         /// <summary>
         /// This API returns monthly adjusted time series 
@@ -92,7 +92,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </summary>
         /// <param name="symbol"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SampleAdjustedDto>> GetMonthlyTimeSeriesAdjustedAsync(string symbol);
+        Task<List<SampleAdjustedDto>> GetMonthlyTimeSeriesAdjustedAsync(string symbol);
 
         /// <summary>
         /// A lightweight alternative to the time series APIs, 
@@ -107,7 +107,7 @@ namespace AlphaVantageConnector.Interfaces
         /// Search symbols.
         /// </summary>
         /// <param name="input"></param>
-        Task<IEnumerable<SymbolDto>> SearchSymbolAsync(string input);
+        Task<List<SymbolDto>> SearchSymbolAsync(string input);
 
 
         #region Technical indicators
@@ -127,7 +127,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </param>
         /// <param name="seriesType"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, SmaSampleDto>> GetSmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType);
+        Task<List<SmaSampleDto>> GetSmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType);
 
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace AlphaVantageConnector.Interfaces
         /// </param>
         /// <param name="seriesType"></param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, EmaSampleDto>> GetEmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType);
+        Task<List<EmaSampleDto>> GetEmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType);
 
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace AlphaVantageConnector.Interfaces
         /// Time interval between two consecutive data points in the time series
         /// </param>
         /// <returns></returns>
-        Task<Dictionary<DateTime, VwapSampleDto>> GetVwapAsync(string symbol, IntervalsEnum interval);
+        Task<List<VwapSampleDto>> GetVwapAsync(string symbol, IntervalsEnum interval);
 
         #endregion Technical indicators
 
@@ -167,7 +167,7 @@ namespace AlphaVantageConnector.Interfaces
         /// This API returns the realtime and historical sector performances calculated from S&P500 incumbents. 
         /// </summary>
         /// <returns></returns>
-        Task<Dictionary<PerfomanceRank, PerformanceDto>> GetSectorAsync();
+        Task<List<PerformanceDto>> GetSectorAsync();
         #endregion Sector
     }
 }

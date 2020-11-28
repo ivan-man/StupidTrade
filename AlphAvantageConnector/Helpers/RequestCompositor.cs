@@ -89,7 +89,7 @@ namespace AlphaVantageConnector
 
             var stringUrl = QueryHelpers.AddQueryString(AlphaVantageConstants.BaseAddress, urlParameters);
 
-            _apiValidator.Validate(stringUrl);
+            _apiValidator.IsValid(stringUrl);
 
             return stringUrl;
         }

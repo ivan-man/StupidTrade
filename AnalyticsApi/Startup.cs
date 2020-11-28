@@ -2,6 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AlphaVantageConnector;
+using AlphaVantageConnector.Interfaces;
+using AlphaVantageConnector.Validation;
+using Common;
+using Common.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,8 +30,19 @@ namespace AnalyticsApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
 
+            var apiHttpClient = HttpClientManager.GetRateLimitClient(@"https://www.alphavantage.co/query", rateLimit: 1000, maxConcurrentRequests:7);
+            services.AddSingleton(x => apiHttpClient);
+
+            services.AddSingleton<IApiKeyService, ApiKeyService>();
+            services.AddSingleton<IApiCallValidator, ApiCallValidator>();
+
+            services.AddSingleton<IRequestCompositor, RequestCompositor>();
+
+            services.AddSingleton<IAlphaVantageConnector, AlphaVantageConnector.AlphaVantageConnector>();
+            services.AddScoped<IAlphaVantageService, AlphaVantageService>();
+
+            services.AddControllers();
             services.AddSwaggerGen();
         }
 
