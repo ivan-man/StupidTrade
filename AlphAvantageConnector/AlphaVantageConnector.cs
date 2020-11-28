@@ -21,7 +21,6 @@ namespace AlphaVantageConnector
     public class AlphaVantageConnector : IAlphaVantageConnector
     {
         private readonly IApiKeyService _apiKeyService;
-        private readonly IRequestCompositor _requestCompositor;
 
         /// <summary>
         /// One for all to save sockets.
@@ -30,20 +29,18 @@ namespace AlphaVantageConnector
 
         public AlphaVantageConnector(
             IApiKeyService apiKeyService,
-            IRequestCompositor requestCompositor,
             IRateLimitHttpClient httpClient
             )
         {
             _apiHttpClient = httpClient;
 
             _apiKeyService = apiKeyService;
-            _requestCompositor = requestCompositor;
         }
 
 
         public async Task<(MetaData MetaData, TData Data)> RequestApiAsync<TData>(ApiFunctions function, IDictionary<ApiParameters, string> parameters = null)
         {
-            var request = _requestCompositor.ComposeHttpRequest(_apiKeyService.GetKey(), function, parameters);
+            var request = AlphaVantageRequestCompositor.ComposeHttpRequest(_apiKeyService.GetKey(), function, parameters);
             var response = await _apiHttpClient.SendWithLimitAsync(request);
 
             var jsonString = await response.Content.ReadAsStringAsync();

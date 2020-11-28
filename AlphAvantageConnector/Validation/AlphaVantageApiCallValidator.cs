@@ -14,12 +14,12 @@ namespace AlphaVantageConnector.Validation
     /// <summary>
     /// Not strong validation of AV API url, but API function must be first.
     /// </summary>
-    public class ApiCallValidator : IApiCallValidator
+    public static class AlphaVantageApiCallValidator 
     {
-        private readonly string _callPattern;
-        private Regex _urlRegex;
+        private static readonly string _callPattern;
+        private static Regex _urlRegex;
 
-        public ApiCallValidator()
+        static AlphaVantageApiCallValidator()
         {
             //Examples:
             //from_symbol=EUR
@@ -96,7 +96,7 @@ namespace AlphaVantageConnector.Validation
                 $"|{ApiParametersDic.GetWord(ApiParameters.SlowKmaType)}" +
                 $"|{ApiParametersDic.GetWord(ApiParameters.FastDmaType)}" +
                 $"|{ApiParametersDic.GetWord(ApiParameters.FastDPeriod)}" +
-                $"|{ApiParametersDic.GetWord(ApiParameters.TimePeriod)}([0-9]" + "{0,1})" +
+                $"|{ApiParametersDic.GetWord(ApiParameters.TimePeriod)}([0-9]{0,1})" +
                 ")=([0-9]{1,4})";
             patterns.Add(integersPattern);
 
@@ -107,7 +107,7 @@ namespace AlphaVantageConnector.Validation
             _urlRegex = new Regex(_callPattern);
         }
 
-        public bool IsValid(string url)
+        public static bool IsValid(string url)
         {
             return true;
             

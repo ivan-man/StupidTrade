@@ -2,20 +2,16 @@ using AlphaVantageConnector;
 using AlphaVantageConnector.Dictionaries;
 using AlphaVantageConnector.Enums;
 using AlphaVantageConnector.Interfaces;
-using AlphaVantageConnector.Validation;
 using AlphaVantageDto;
 using AlphaVantageDto.Enums;
 using Common;
 using Common.Interfaces;
 using Moq;
-using Newtonsoft;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Xunit;
 
 namespace AlphaVantageConnectorTests
 {
@@ -34,43 +30,32 @@ namespace AlphaVantageConnectorTests
         private readonly Mock<IApiKeyService> _apiKeyServiceMock = new Mock<IApiKeyService>();
         private readonly IApiKeyService _apiKeyServiceReal = new ApiKeyService();
 
-        private readonly Mock<IApiCallValidator> _apiCallValidatorMock = new Mock<IApiCallValidator>();
-
-        private IApiCallValidator _apiCallValidatorReal = new ApiCallValidator();
-        private IRequestCompositor _requestCompositorReal;
-
         private IAlphaVantageConnector _connectorReal;
         private IAlphaVantageService _alphaVantageServiceReal;
 
 
-
-        public UnitTest1()
-        {
-            Init();
-        }
-
-        private void Init()
+        [SetUp]
+        public void SetUp()
         {
             var interval = 1000; //if you run all tests, set it 10000+ miliseconds, or use several keys
             _apiHttpClient = HttpClientManager.GetRateLimitClient(@"https://www.alphavantage.co/query", interval, 7);
 
-            _apiCallValidatorMock.Setup(q => q.IsValid(It.IsAny<string>())).Returns(true);
+            //ApiCallValidatorMock.Setup(q => q.IsValid(It.IsAny<string>())).Returns(true);
 
-            _apiCallValidatorReal = new ApiCallValidator();
-            _requestCompositorReal = new RequestCompositor(_apiCallValidatorReal);
+            //_requestCompositorReal = new RequestCompositor(_apiCallValidatorReal);
 
-            _connectorReal = new AlphaVantageConnector.AlphaVantageConnector(_apiKeyServiceMock.Object, _requestCompositorReal, _apiHttpClient);
+            _connectorReal = new AlphaVantageConnector.AlphaVantageConnector(_apiKeyServiceMock.Object, _apiHttpClient);
 
             _alphaVantageServiceReal = new AlphaVantageService(_connectorReal);
         }
 
         #region CoreTests
 
-        [Fact]
+        [Test]
         public async Task InformationAboutFreeKeyTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(demoKey);
-            _requestCompositorReal = new RequestCompositor(_apiCallValidatorMock.Object);
+            //_requestCompositorReal = new RequestCompositor(_apiCallValidatorMock.Object);
 
             var response = await _connectorReal.RequestApiAsync<InformationDto>(
                 ApiFunctions.TIME_SERIES_WEEKLY,
@@ -82,16 +67,16 @@ namespace AlphaVantageConnectorTests
 
             var informationDto = response.Data;
 
-            Assert.Equal(
+            Assert.AreEqual(
                 "The **demo** API key is for demo purposes only. Please claim your free API key at (https://www.alphavantage.co/support/#api-key) to explore our full API offerings. It takes fewer than 20 seconds, and we are committed to making it free forever.",
                 informationDto?.Information);
         }
 
 
-        [Fact]
+        [Test]
         public async Task ConnectorGetDataTest()
         {
-            var connector = new AlphaVantageConnector.AlphaVantageConnector(_apiKeyServiceReal, _requestCompositorReal, _apiHttpClient);
+            var connector = new AlphaVantageConnector.AlphaVantageConnector(_apiKeyServiceReal, _apiHttpClient);
 
             var response = await connector.RequestApiAsync<Dictionary<DateTime, SampleAlphaDto>>(ApiFunctions.TIME_SERIES_WEEKLY, new Dictionary<ApiParameters, string>
             {
@@ -100,8 +85,8 @@ namespace AlphaVantageConnectorTests
 
             var metaData = response.MetaData;
 
-            Assert.Equal("Weekly Prices (open, high, low, close) and Volumes", metaData.Information);
-            Assert.Equal(_testSymbol, metaData.Symbol);
+            Assert.AreEqual("Weekly Prices (open, high, low, close) and Volumes", metaData.Information);
+            Assert.AreEqual(_testSymbol, metaData.Symbol);
 
             var data = response.Data;
 
@@ -109,19 +94,19 @@ namespace AlphaVantageConnectorTests
         }
 
 
-        [Fact]
+        [Test]
         public void CurrencyDescTest()
         {
             var desk = CurrencyDesc.GetSescripton(Currency.AED);
             Assert.False(string.IsNullOrEmpty(desk));
         }
 
-
-        [Fact]
-        public void CompositorValidatorTest()
+        [Test]
+        public void CompositorValidatorExceptionTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns("Fake key");
-            var ex = Assert.Throws<Exception>(() => _requestCompositorReal.ComposeUrl(
+
+            var ex = Assert.Throws<Exception>(() => AlphaVantageRequestCompositor.ComposeUrl(
                _apiKeyServiceMock.Object.GetKey(),
                ApiFunctions.TIME_SERIES_WEEKLY,
                new Dictionary<ApiParameters, string>
@@ -131,7 +116,8 @@ namespace AlphaVantageConnectorTests
             ));
 
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns("0123456789ABCDEF");
-            var request = _requestCompositorReal.ComposeUrl(
+
+            var request = AlphaVantageRequestCompositor.ComposeUrl(
                 _apiKeyServiceMock.Object.GetKey(),
                 ApiFunctions.TIME_SERIES_WEEKLY,
                 new Dictionary<ApiParameters, string>
@@ -140,13 +126,42 @@ namespace AlphaVantageConnectorTests
                 }
             );
 
-            Assert.Equal($@"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&apikey=0123456789ABCDEF&symbol={_testSymbol}", request.ToString());
+            Assert.AreEqual($@"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&apikey=0123456789ABCDEF&symbol={_testSymbol}", request.ToString());
         }
+
+        [Test]
+        public void CompositorBuildUrlTest()
+        {
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns("Fake key");
+
+            var ex = Assert.Throws<Exception>(() => AlphaVantageRequestCompositor.ComposeUrl(
+               _apiKeyServiceMock.Object.GetKey(),
+               ApiFunctions.TIME_SERIES_WEEKLY,
+               new Dictionary<ApiParameters, string>
+               {
+                    { ApiParameters.Symbol, _testSymbol }
+               }
+            ));
+
+            _apiKeyServiceMock.Setup(q => q.GetKey()).Returns("0123456789ABCDEF");
+
+            var request = AlphaVantageRequestCompositor.ComposeUrl(
+                _apiKeyServiceMock.Object.GetKey(),
+                ApiFunctions.TIME_SERIES_WEEKLY,
+                new Dictionary<ApiParameters, string>
+                {
+                    { ApiParameters.Symbol, _testSymbol }
+                }
+            );
+
+            Assert.AreEqual($@"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&apikey=0123456789ABCDEF&symbol={_testSymbol}", request.ToString());
+        }
+
         #endregion CcoreTests
 
         #region StockTimeSeries
 
-        [Fact]
+        [Test]
         public async Task SearchSymbolTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -156,7 +171,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result?.Any(q => q.Symbol.Equals(_testSymbol)) == true);
         }
 
-        [Fact]
+        [Test]
         public async Task GetIntradaySeriesTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -165,7 +180,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result?.Any() == true);
         }
 
-        [Fact]
+        [Test]
         public async Task GetDailyTimeSeriesTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -175,7 +190,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result?.Count == 100);
         }
 
-        [Fact]
+        [Test]
         public async Task GetDailyTimeSeriesAdjustedTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -185,7 +200,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result?.Count == 100);
         }
 
-        [Fact]
+        [Test]
         public async Task GetWeeklyTimeSeriesTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -194,7 +209,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result?.Any() == true);
         }
 
-        [Fact]
+        [Test]
         public async Task GetWeeklyTimeSeriesAdjustedTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -203,7 +218,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result?.Any() == true);
         }
 
-        [Fact]
+        [Test]
         public async Task GetMonthlyTimeSeriesTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -212,7 +227,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result?.Any() == true);
         }
 
-        [Fact]
+        [Test]
         public async Task GetMonthlyTimeSeriesAdjustedTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -221,19 +236,19 @@ namespace AlphaVantageConnectorTests
             Assert.True(result?.Any() == true);
         }
 
-        [Fact]
+        [Test]
         public async Task GetQuoteEndpointTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
             var result = await _alphaVantageServiceReal.GetQuoteEndpointAsync(_testSymbol);
 
             Assert.NotNull(result);
-            Assert.Equal(_testSymbol, result.Symbol);
+            Assert.AreEqual(_testSymbol, result.Symbol);
         }
         #endregion StockTimeSeries
 
         #region Technical indicators
-        [Fact]
+        [Test]
         public async Task GetSmaTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -243,7 +258,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result.Any());
         }
 
-        [Fact]
+        [Test]
         public async Task GetEmaTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -253,7 +268,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result.Any());
         }
 
-        [Fact]
+        [Test]
         public async Task GetVwapTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
@@ -263,7 +278,7 @@ namespace AlphaVantageConnectorTests
             Assert.True(result.Any());
         }
 
-        [Fact]
+        [Test]
         public async Task GetSectorTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());

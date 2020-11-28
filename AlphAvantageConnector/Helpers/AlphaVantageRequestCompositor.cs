@@ -8,21 +8,15 @@ using AlphaVantageConnector.Resources;
 using AlphaVantageConnector.Dictionaries;
 using System.Linq;
 using AlphaVantageConnector.Interfaces;
+using AlphaVantageConnector.Validation;
 
 namespace AlphaVantageConnector
 {
     /// <summary>
     /// Compositor of requests.
     /// </summary>
-    public class RequestCompositor : IRequestCompositor
+    public static class AlphaVantageRequestCompositor
     {
-        private readonly IApiCallValidator _apiValidator;
-
-        public RequestCompositor(IApiCallValidator apiValidator)
-        {
-            _apiValidator = apiValidator;
-        }
-
         /// <summary>
         /// Composing of request to API.
         /// </summary>
@@ -31,7 +25,7 @@ namespace AlphaVantageConnector
         /// <param name="parameters"></param>
         /// <param name="httpMethod"></param>
         /// <returns></returns>
-        public HttpRequestMessage ComposeHttpRequest(
+        public static HttpRequestMessage ComposeHttpRequest(
             string apiKey,
             ApiFunctions function,
             IDictionary<ApiParameters, string> parameters = null,
@@ -56,7 +50,7 @@ namespace AlphaVantageConnector
         /// <param name="function"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        public string ComposeUrl(
+        public static string ComposeUrl(
             string apiKey,
             ApiFunctions function,
             IDictionary<ApiParameters, string> parameters = null
@@ -89,7 +83,7 @@ namespace AlphaVantageConnector
 
             var stringUrl = QueryHelpers.AddQueryString(AlphaVantageConstants.BaseAddress, urlParameters);
 
-            _apiValidator.IsValid(stringUrl);
+            AlphaVantageApiCallValidator.IsValid(stringUrl);
 
             return stringUrl;
         }
