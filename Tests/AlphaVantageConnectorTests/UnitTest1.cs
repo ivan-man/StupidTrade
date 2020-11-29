@@ -40,10 +40,6 @@ namespace AlphaVantageConnectorTests
             var interval = 1000; //if you run all tests, set it 10000+ miliseconds, or use several keys
             _apiHttpClient = HttpClientManager.GetRateLimitClient(@"https://www.alphavantage.co/query", interval, 7);
 
-            //ApiCallValidatorMock.Setup(q => q.IsValid(It.IsAny<string>())).Returns(true);
-
-            //_requestCompositorReal = new RequestCompositor(_apiCallValidatorReal);
-
             _connectorReal = new AlphaVantageConnector.AlphaVantageConnector(_apiKeyServiceMock.Object, _apiHttpClient);
 
             _alphaVantageServiceReal = new AlphaVantageService(_connectorReal);
@@ -67,9 +63,9 @@ namespace AlphaVantageConnectorTests
 
             var informationDto = response.Data;
 
-            var demoMessage = "The **demo** API key is for demo purposes only. Please claim your free API key at (https://www.alphavantage.co/support/#api-key) to explore our full API offerings. It takes fewer than 20 seconds, and we are committed to making it free forever.";
+            var demoMessage = "The **demo** API key is for demo purposes only. Please claim your free API key at (https://www.alphavantage.co/support/#api-key) to explore our full API offerings. It takes fewer than 20 seconds";
 
-            Assert.AreEqual(demoMessage, informationDto?.Information);
+            Assert.True(informationDto?.Information.Contains(demoMessage));
         }
 
 
@@ -175,7 +171,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetIntradaySeriesTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetIntradaySeriesAsync(_testSymbol, IntervalsEnum.FiveMin);
+            var result = await _alphaVantageServiceReal.GetIntradaySeriesAsync(_testSymbol, AlphaVantageConnector.Enums.Intervals.FiveMin);
 
             Assert.True(result?.Any() == true);
         }
@@ -254,7 +250,7 @@ namespace AlphaVantageConnectorTests
         {
             var key = _realKeySrvice.GetKey();
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(key);
-            var result = await _alphaVantageServiceReal.GetSmaAsync(_testSymbol, IntervalsEnum.FiveMin, 60, SeriesType.Close);
+            var result = await _alphaVantageServiceReal.GetSmaAsync(_testSymbol, AlphaVantageConnector.Enums.Intervals.FiveMin, 60, SeriesType.Close);
 
             Assert.NotNull(result);
             Assert.True(result.Any());
@@ -264,7 +260,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetEmaTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetEmaAsync(_testSymbol, IntervalsEnum.FiveMin, 60, SeriesType.Close);
+            var result = await _alphaVantageServiceReal.GetEmaAsync(_testSymbol, AlphaVantageConnector.Enums.Intervals.FiveMin, 60, SeriesType.Close);
 
             Assert.NotNull(result);
             Assert.True(result.Any());
@@ -274,7 +270,7 @@ namespace AlphaVantageConnectorTests
         public async Task GetVwapTest()
         {
             _apiKeyServiceMock.Setup(q => q.GetKey()).Returns(_realKeySrvice.GetKey());
-            var result = await _alphaVantageServiceReal.GetVwapAsync(_testSymbol, IntervalsEnum.FiveMin);
+            var result = await _alphaVantageServiceReal.GetVwapAsync(_testSymbol, AlphaVantageConnector.Enums.Intervals.FiveMin);
 
             Assert.NotNull(result);
             Assert.True(result.Any());

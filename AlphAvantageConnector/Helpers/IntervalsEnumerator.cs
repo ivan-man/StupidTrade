@@ -10,12 +10,12 @@ namespace AlphaVantageConnector.Helpers
     /// </summary>
     internal class IntervalsEnumerator : IEnumerator<string>
     {
-        private static readonly IntervalsEnum[] _enumValues = Enum.GetValues(typeof(IntervalsEnum)) as IntervalsEnum[];
+        private static readonly Enums.Intervals[] _enumValues = Enum.GetValues(typeof(Enums.Intervals)) as Enums.Intervals[];
 
         /// <summary>
         /// initial value is 1, because 0 - is invalid, not initiated value
         /// </summary>
-        private IntervalsEnum _currentEnumValue = (IntervalsEnum) 1;
+        private Enums.Intervals _currentEnumValue = (Enums.Intervals) 1;
 
         private readonly Intervals _intervalsEntity;
 
@@ -30,7 +30,7 @@ namespace AlphaVantageConnector.Helpers
 
         public void Dispose()
         {
-            _currentEnumValue = (IntervalsEnum) 1;
+            _currentEnumValue = (Enums.Intervals) 1;
         }
 
         public bool MoveNext()
@@ -42,7 +42,7 @@ namespace AlphaVantageConnector.Helpers
 
         public void Reset()
         {
-            _currentEnumValue = (IntervalsEnum) 1;
+            _currentEnumValue = (Enums.Intervals) 1;
         }
     }
 }

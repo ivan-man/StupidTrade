@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Runtime.Serialization;
 
 namespace AlphaVantageDto.Enums
 {
     public enum SymbolType
     {
+        ETF,
         Equity,
         Currency,
+        [EnumMember(Value = "Mutual Fund")]
+        MutualFund,
     }
 }

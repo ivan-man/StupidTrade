@@ -12,7 +12,7 @@ namespace AlphaVantageConnector.Interfaces
         /// <summary>
         /// This API returns intraday time series (timestamp, open, high, low, close, volume) of the equity specified. 
         /// </summary>
-        Task<List<SampleDto>> GetIntradaySeriesAsync(string symbol, IntervalsEnum interval, OutputSize outputSize = OutputSize.Full);
+        Task<List<SampleDto>> GetIntradaySeriesAsync(string symbol, Enums.Intervals interval, OutputSize outputSize = OutputSize.Full);
 
 
         /// <summary>
@@ -29,8 +29,6 @@ namespace AlphaVantageConnector.Interfaces
         /// full returns the full-length time series of 20+ years of historical data. 
         /// The "compact" option is recommended if you would like to reduce the data size of each API call. 
         /// </param>
-        /// <returns></returns>
-        /// <returns></returns>
         Task<List<SampleDto>> GetDailyTimeSeriesAsync(string symbol, OutputSize outputSize = OutputSize.Compact);
 
 
@@ -49,7 +47,6 @@ namespace AlphaVantageConnector.Interfaces
         /// full returns the full-length time series of 20+ years of historical data. 
         /// The "compact" option is recommended if you would like to reduce the data size of each API call. 
         /// </param>
-        /// <returns></returns>
         Task<List<SampleAdjustedDto>> GetDailyTimeSeriesAdjustedAsync(string symbol, OutputSize outputSize = OutputSize.Compact);
 
         /// <summary>
@@ -58,8 +55,7 @@ namespace AlphaVantageConnector.Interfaces
         /// The latest data point is the cumulative prices and volume information for the week(or partial week) 
         /// that contains the current trading day, updated realtime.
         /// </summary>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
+        /// <param name="symbol">Target symbol.</param>
         Task<List<SampleDto>> GetWeeklyTimeSeriesAsync(string symbol);
 
         /// <summary>
@@ -69,8 +65,7 @@ namespace AlphaVantageConnector.Interfaces
         /// The latest data point is the cumulative prices and volume information for the week (or partial week) 
         /// that contains the current trading day, updated realtime.
         /// </summary>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
+        /// <param name="symbol">Target symbol.</param>
         Task<List<SampleAdjustedDto>> GetWeeklyTimeSeriesAdjustedAsync(string symbol);
 
         /// <summary>
@@ -79,8 +74,7 @@ namespace AlphaVantageConnector.Interfaces
         /// The latest data point is the cumulative prices and volume information for the month(or partial month) 
         /// that contains the current trading day, updated realtime.
         /// </summary>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
+        /// <param name="symbol">Target symbol.</param>
         Task<List<SampleDto>> GetMonthlyTimeSeriesAsync(string symbol);
 
         /// <summary>
@@ -90,18 +84,15 @@ namespace AlphaVantageConnector.Interfaces
         /// The latest data point is the cumulative prices and volume information for 
         /// the month(or partial month) that contains the current trading day, updated realtime.
         /// </summary>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
+        /// <param name="symbol">Target symbol.</param>
         Task<List<SampleAdjustedDto>> GetMonthlyTimeSeriesAdjustedAsync(string symbol);
 
         /// <summary>
         /// A lightweight alternative to the time series APIs, 
         /// this service returns the latest price and volume information for a security of your choice. 
         /// </summary>
-        /// <param name="symbol"></param>
-        /// <returns></returns>
+        /// <param name="symbol">Target symbol.</param>
         Task<GlobalQuoteDto> GetQuoteEndpointAsync(string symbol);
-
 
         /// <summary>
         /// Search symbols.
@@ -126,9 +117,7 @@ namespace AlphaVantageConnector.Interfaces
         /// Positive integers are accepted (e.g., time_period=60, time_period=200)
         /// </param>
         /// <param name="seriesType"></param>
-        /// <returns></returns>
-        Task<List<SmaSampleDto>> GetSmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType);
-
+        Task<List<SmaSampleDto>> GetSmaAsync(string symbol, Enums.Intervals interval, int timePeriod, SeriesType seriesType);
 
         /// <summary>
         /// This API returns the exponential moving average(EMA) values.
@@ -144,9 +133,7 @@ namespace AlphaVantageConnector.Interfaces
         /// Positive integers are accepted (e.g., time_period=60, time_period=200)
         /// </param>
         /// <param name="seriesType"></param>
-        /// <returns></returns>
-        Task<List<EmaSampleDto>> GetEmaAsync(string symbol, IntervalsEnum interval, int timePeriod, SeriesType seriesType);
-
+        Task<List<EmaSampleDto>> GetEmaAsync(string symbol, Enums.Intervals interval, int timePeriod, SeriesType seriesType);
 
         /// <summary>
         /// This API returns the volume weighted average price (VWAP) for intraday time series. 
@@ -157,8 +144,7 @@ namespace AlphaVantageConnector.Interfaces
         /// <param name="interval">
         /// Time interval between two consecutive data points in the time series
         /// </param>
-        /// <returns></returns>
-        Task<List<VwapSampleDto>> GetVwapAsync(string symbol, IntervalsEnum interval);
+        Task<List<VwapSampleDto>> GetVwapAsync(string symbol, Enums.Intervals interval);
 
         #endregion Technical indicators
 

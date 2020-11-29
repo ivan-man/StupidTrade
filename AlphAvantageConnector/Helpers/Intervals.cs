@@ -18,27 +18,27 @@ namespace AlphaVantageConnector
 
         public static Intervals Values = new Intervals();
         
-        public string this[IntervalsEnum value]
+        public string this[Enums.Intervals value]
         {
             get
             {
                 switch (value)
                 {
-                    case IntervalsEnum.OneMin:
+                    case Enums.Intervals.OneMin:
                         return "1min";
-                    case IntervalsEnum.FiveMin:
+                    case Enums.Intervals.FiveMin:
                         return "5min";
-                    case IntervalsEnum.FifteenMin:
+                    case Enums.Intervals.FifteenMin:
                         return "15min";
-                    case IntervalsEnum.ThirtyMin:
+                    case Enums.Intervals.ThirtyMin:
                         return "30min";
-                    case IntervalsEnum.SixtyMin:
+                    case Enums.Intervals.SixtyMin:
                         return "60min";
-                    case IntervalsEnum.Daily:
+                    case Enums.Intervals.Daily:
                         return "daily";
-                    case IntervalsEnum.Weekly:
+                    case Enums.Intervals.Weekly:
                         return "weekly";
-                    case IntervalsEnum.Monthly:
+                    case Enums.Intervals.Monthly:
                         return "monthly";
                     default:
                         throw new IndexOutOfRangeException(AvResources.InvalidtIntervalValueError);
